@@ -1,4 +1,4 @@
-namespace ExcelToSQLite.Models
+namespace Mobiphone.Models
 {
     public class RecordFilterOptions
     {

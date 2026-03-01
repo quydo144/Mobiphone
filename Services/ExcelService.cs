@@ -1,9 +1,9 @@
 using System.IO;
 using System.Linq;
 using OfficeOpenXml;
-using ExcelToSQLite.Models;
+using Mobiphone.Models;
 
-namespace ExcelToSQLite.Services
+namespace Mobiphone.Services
 {
     public class ExcelService
     {

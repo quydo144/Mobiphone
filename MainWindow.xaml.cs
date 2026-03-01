@@ -1,13 +1,13 @@
 using System.IO;
 using System.Windows;
 using System.Linq;
-using ExcelToSQLite.Services;
-using ExcelToSQLite.Models;
+using Mobiphone.Services;
+using Mobiphone.Models;
 using System.Collections.Generic;
 using WinForms = System.Windows.Forms;
 using MessageBox = System.Windows.MessageBox;
 
-namespace ExcelToSQLite
+namespace Mobiphone
 {
     public partial class MainWindow : Window
     {

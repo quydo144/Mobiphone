@@ -1,6 +1,6 @@
 using System.Windows;
 
-namespace ExcelToSQLite
+namespace Mobiphone
 {
     public partial class App : System.Windows.Application
     {

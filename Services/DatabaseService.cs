@@ -1,8 +1,8 @@
 using System.Data.SQLite;
 using System.IO;
-using ExcelToSQLite.Models;
+using Mobiphone.Models;
 
-namespace ExcelToSQLite.Services
+namespace Mobiphone.Services
 {
     public class DatabaseService
     {

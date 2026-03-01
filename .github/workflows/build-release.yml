@@ -24,7 +24,7 @@ jobs:
       run: dotnet restore Mobiphone.sln
     
     - name: Build
-      run: dotnet build Mobiphone.sln --no-restore --configuration Release
+      run: dotnet build Mobiphone.csproj --no-restore --configuration Release
     
     - name: Test
       run: dotnet test Mobiphone.sln --no-build --configuration Release --verbosity normal
@@ -51,12 +51,13 @@ jobs:
     
     - name: Publish Application
       run: |
-        dotnet publish ExcelToSQLite.csproj `
+        dotnet publish Mobiphone.csproj `
           -c Release `
           -r win-x64 `
           --self-contained true `
-          -p:PublishSingleFile=false `
+          -p:PublishSingleFile=true `
           -p:PublishReadyToRun=true `
+          -p:IncludeNativeLibrariesForSelfExtract=true `
           -o bin/Release/net8.0-windows/win-x64/publish
     
     - name: Build WiX Installer
@@ -78,16 +79,19 @@ jobs:
         files: Mobiphone.msi
         name: Release ${{ github.ref_name }}
         body: |
-          ## ExcelToSQLite ${{ steps.get_version.outputs.VERSION }}
+          ## Mobiphone ${{ steps.get_version.outputs.VERSION }}
           
           ### Cài đặt
           1. Tải file `Mobiphone.msi`
           2. Chạy file MSI và làm theo hướng dẫn cài đặt
           3. Ứng dụng sẽ được cài đặt vào Program Files
+          4. Sau khi cài đặt xong, bạn có thể chọn mở ứng dụng ngay
           
           ### Tính năng
           - Chuyển đổi file Excel sang SQLite database
           - Giao diện WPF thân thiện
+          - Phân loại sim đặc biệt (Thần tài, Lộc phát, Tứ quý, ...)
+          - Filter và tìm kiếm nâng cao
           
           ### Yêu cầu hệ thống
           - Windows 10/11 (64-bit)

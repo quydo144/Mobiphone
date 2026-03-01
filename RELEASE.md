@@ -17,7 +17,7 @@ Khi muốn release phiên bản mới cho user:
 
 1. **Cập nhật version trong project** (nếu cần):
    ```xml
-   <!-- Trong ExcelToSQLite.csproj -->
+   <!-- Trong Mobiphone.csproj -->
    <Version>1.0.0</Version>
    ```
 
@@ -40,6 +40,36 @@ Khi muốn release phiên bản mới cho user:
    - Double-click để cài đặt
    - Ứng dụng sẽ được cài vào Program Files
    - Shortcut tự động tạo trong Start Menu
+
+## Test Local trước khi Release
+
+Trước khi push tag lên GitHub, bạn nên test toàn bộ quy trình build ở local:
+
+### Chạy script test tự động:
+```powershell
+.\test-release.ps1
+```
+
+Script này thực hiện:
+1. Restore dependencies
+2. Build project (Release configuration)
+3. Run tests
+4. Publish application (self-contained, single-file)
+5. Build MSI installer với WiX
+
+### Kết quả:
+- ✅ `bin\Release\net8.0-windows\win-x64\publish\Mobiphone.exe` - Executable
+- ✅ `Mobiphone.msi` - MSI installer
+
+### Test MSI installer:
+```powershell
+# Install locally để test
+.\Mobiphone.msi
+
+# Sau khi test xong, uninstall qua Settings -> Apps
+```
+
+**Lưu ý**: Nếu có lỗi, sửa và test lại trước khi push tag.
 
 ## Ví Dụ Release
 

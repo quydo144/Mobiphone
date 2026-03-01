@@ -4,8 +4,4 @@
     <OutputName>Mobiphone</OutputName>
     <InstallerPlatform>x64</InstallerPlatform>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="WixToolset.UI.wixext" Version="4.0.5" />
-  </ItemGroup>
 </Project>

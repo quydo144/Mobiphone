@@ -59,7 +59,7 @@
 1. Truy cập trang [Releases](../../releases) của repository
 2. Tải file `Mobiphone.msi` từ phiên bản mới nhất
 3. Double-click file MSI và làm theo hướng dẫn
-4. Ứng dụng sẽ được cài đặt vào `C:\Program Files\ExcelToSQLite`
+4. Ứng dụng sẽ được cài đặt vào `C:\Program Files\Mobiphone`
 5. Shortcut tự động xuất hiện trong Start Menu
 
 **Lưu ý**: Windows Defender có thể cảnh báo vì đây là ứng dụng chưa được ký số. Chọn "More info" → "Run anyway" để tiếp tục.
@@ -84,7 +84,7 @@ dotnet build Mobiphone.sln
 
 3. Chạy ứng dụng:
 ```powershell
-dotnet run --project ExcelToSQLite.csproj
+dotnet run --project Mobiphone.csproj
 ```
 
 ## Cấu trúc file Excel
@@ -119,7 +119,7 @@ Mobiphone/
 ├── App.xaml.cs                # Application code-behind
 ├── MainWindow.xaml            # Main UI với pagination & filter
 ├── MainWindow.xaml.cs         # Main window code-behind
-├── ExcelToSQLite.csproj       # Project file
+├── Mobiphone.csproj           # Project file
 ├── Mobiphone.sln              # Solution file
 ├── README.md                  # Documentation
 └── TODO.md                    # Development history
@@ -198,7 +198,41 @@ Database SQLite sẽ được tạo tự động tại thư mục bin với tên
 
 ## Release mới (Cho Developer)
 
-Để tạo phiên bản release mới với MSI installer:
+### Test release build locally
+
+Trước khi push tag, bạn có thể test toàn bộ quy trình release ở local:
+
+```powershell
+.\test-release.ps1
+```
+
+Script này sẽ:
+1. ✅ Restore dependencies
+2. ✅ Build project (Release mode)
+3. ✅ Run tests
+4. ✅ Publish application (single-file exe)
+5. ✅ Build MSI installer
+
+Kết quả:
+- `bin\Release\net8.0-windows\win-x64\publish\Mobiphone.exe` - Single-file executable
+- `Mobiphone.msi` - MSI installer
+
+### Cleanup các file tạm thời
+
+Sau khi build MSI, script tự động cleanup các file không cần thiết. Nếu cần cleanup thủ công:
+
+```powershell
+.\cleanup.ps1
+```
+
+Script này sẽ xóa:
+- `bin/` và `obj/` folders (build artifacts)
+- `*.wixpdb` files (WiX debug files)
+- Test MSI files
+
+### Push release lên GitHub
+
+Sau khi test thành công ở local:
 
 ```bash
 # Commit các thay đổi

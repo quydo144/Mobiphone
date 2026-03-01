@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
-     xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
-  <Package Name="ExcelToSQLite" 
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package Name="Mobiphone" 
            Manufacturer="Mobiphone" 
            Version="1.0.0.0"
            UpgradeCode="12345678-1234-1234-1234-123456789012">
@@ -10,43 +9,37 @@
     
     <MediaTemplate EmbedCab="yes" />
     
-    <!-- Use WixUI for installation dialog -->
-    <ui:WixUI Id="WixUI_Minimal" />
-    
-    <Feature Id="ProductFeature" Title="ExcelToSQLite" Level="1">
+    <Feature Id="ProductFeature" Title="Mobiphone" Level="1">
       <ComponentGroupRef Id="ProductComponents" />
     </Feature>
   </Package>
 
   <Fragment>
     <StandardDirectory Id="ProgramFiles64Folder">
-      <Directory Id="INSTALLFOLDER" Name="ExcelToSQLite" />
+      <Directory Id="INSTALLFOLDER" Name="Mobiphone" />
     </StandardDirectory>
   </Fragment>
 
   <Fragment>
     <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
       <!-- Main executable -->
-      <Component Id="ExcelToSQLite.exe">
-        <File Source="..\bin\Release\net8.0-windows\win-x64\publish\ExcelToSQLite.exe" KeyPath="yes">
+      <Component Id="Mobiphone.exe">
+        <File Source="..\bin\Release\net8.0-windows\win-x64\publish\Mobiphone.exe" KeyPath="yes">
           <Shortcut Id="StartMenuShortcut" 
                     Directory="ProgramMenuFolder" 
-                    Name="ExcelToSQLite"
+                    Name="Mobiphone"
                     WorkingDirectory="INSTALLFOLDER"
-                    Icon="ExcelToSQLite.exe" 
+                    Icon="Mobiphone.exe" 
                     IconIndex="0"
                     Advertise="yes" />
         </File>
       </Component>
 
-      <!-- All other files -->
-      <Component Id="AllPublishFiles">
-        <File Source="..\bin\Release\net8.0-windows\win-x64\publish\*.*" />
-      </Component>
+      <!-- Runtime dependencies will be included with publish -->
     </ComponentGroup>
   </Fragment>
 
   <Fragment>
-    <Icon Id="ExcelToSQLite.exe" SourceFile="..\bin\Release\net8.0-windows\win-x64\publish\ExcelToSQLite.exe" />
+    <Icon Id="Mobiphone.exe" SourceFile="..\bin\Release\net8.0-windows\win-x64\publish\Mobiphone.exe" />
   </Fragment>
 </Wix>
