@@ -88,22 +88,23 @@ File Excel cần có cấu trúc như sau (dòng đầu tiên là header):
 ## Cấu trúc project
 
 ```
-ExcelToSQLite/
+Mobiphone/
 ├── Models/
-│   └── Record.cs              # Model class (Id, Phone, 6 sim types)
+│   ├── Record.cs              # Model class (Id, Phone, 6 sim types)
+│   └── RecordFilterOptions.cs # Filter options model
 ├── Services/
 │   ├── ExcelService.cs        # Service đọc file Excel
 │   └── DatabaseService.cs     # Service xử lý SQLite
-├── .vscode/
-│   ├── launch.json            # Debug configuration
-│   └── tasks.json             # Build tasks
+├── bin/                       # Build output
+├── obj/                       # Build intermediates
 ├── App.xaml                   # Application definition
 ├── App.xaml.cs                # Application code-behind
 ├── MainWindow.xaml            # Main UI với pagination & filter
 ├── MainWindow.xaml.cs         # Main window code-behind
+├── ExcelToSQLite.csproj       # Project file
+├── Mobiphone.sln              # Solution file
 ├── README.md                  # Documentation
-├── TODO.md                    # Development history
-└── ExcelToSQLite.csproj       # Project file
+└── TODO.md                    # Development history
 ```
 
 ## Packages sử dụng
