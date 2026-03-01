@@ -21,13 +21,13 @@ jobs:
         dotnet-version: 8.0.x
     
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore Mobiphone.sln
     
     - name: Build
-      run: dotnet build --no-restore --configuration Release
+      run: dotnet build Mobiphone.sln --no-restore --configuration Release
     
     - name: Test
-      run: dotnet test --no-build --configuration Release --verbosity normal
+      run: dotnet test Mobiphone.sln --no-build --configuration Release --verbosity normal
       continue-on-error: true
 
   create-installer:
@@ -47,7 +47,7 @@ jobs:
       run: dotnet tool install --global wix --version 4.0.5
     
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore Mobiphone.sln
     
     - name: Publish Application
       run: |

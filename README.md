@@ -74,17 +74,17 @@
 
 1. Mở terminal và chạy lệnh để restore packages:
 ```powershell
-dotnet restore
+dotnet restore Mobiphone.sln
 ```
 
 2. Build project:
 ```powershell
-dotnet build
+dotnet build Mobiphone.sln
 ```
 
 3. Chạy ứng dụng:
 ```powershell
-dotnet run
+dotnet run --project ExcelToSQLite.csproj
 ```
 
 ## Cấu trúc file Excel
