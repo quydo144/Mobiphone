@@ -120,9 +120,7 @@ namespace ExcelToSQLite.Services
         }
 
         // Get records with pagination
-        public List<Record> GetRecordsWithPagination(int pageNumber, int pageSize, string phoneFilter = "",
-            bool filterMiniThanTai = false, bool filterBigThanTai = false, bool filterLocPhat = false,
-            bool filterTuQuy = false, bool filterTuQuyGiua = false, bool filterTamHoaKep = false)
+        public List<Record> GetRecordsWithPagination(int pageNumber, int pageSize, RecordFilterOptions filterOptions)
         {
             var records = new List<Record>();
 
@@ -137,17 +135,17 @@ namespace ExcelToSQLite.Services
                     // Build WHERE clause
                     var whereConditions = new List<string>();
 
-                    if (!string.IsNullOrWhiteSpace(phoneFilter))
+                    if (!string.IsNullOrWhiteSpace(filterOptions.PhoneFilter))
                     {
                         whereConditions.Add("Phone LIKE @PhoneFilter");
                     }
 
-                    if (filterMiniThanTai) whereConditions.Add("MiniThanTai = 1");
-                    if (filterBigThanTai) whereConditions.Add("BigThanTai = 1");
-                    if (filterLocPhat) whereConditions.Add("LocPhat = 1");
-                    if (filterTuQuy) whereConditions.Add("TuQuy = 1");
-                    if (filterTuQuyGiua) whereConditions.Add("TuQuyGiua = 1");
-                    if (filterTamHoaKep) whereConditions.Add("TamHoaKep = 1");
+                    if (filterOptions.FilterMiniThanTai) whereConditions.Add("MiniThanTai = 1");
+                    if (filterOptions.FilterBigThanTai) whereConditions.Add("BigThanTai = 1");
+                    if (filterOptions.FilterLocPhat) whereConditions.Add("LocPhat = 1");
+                    if (filterOptions.FilterTuQuy) whereConditions.Add("TuQuy = 1");
+                    if (filterOptions.FilterTuQuyGiua) whereConditions.Add("TuQuyGiua = 1");
+                    if (filterOptions.FilterTamHoaKep) whereConditions.Add("TamHoaKep = 1");
 
                     string whereClause = whereConditions.Count > 0
                         ? "WHERE " + string.Join(" OR ", whereConditions)
@@ -162,9 +160,9 @@ namespace ExcelToSQLite.Services
 
                     using (var command = new SQLiteCommand(selectQuery, connection))
                     {
-                        if (!string.IsNullOrWhiteSpace(phoneFilter))
+                        if (!string.IsNullOrWhiteSpace(filterOptions.PhoneFilter))
                         {
-                            command.Parameters.AddWithValue("@PhoneFilter", "%" + phoneFilter + "%");
+                            command.Parameters.AddWithValue("@PhoneFilter", "%" + filterOptions.PhoneFilter + "%");
                         }
 
                         command.Parameters.AddWithValue("@PageSize", pageSize);
@@ -199,9 +197,7 @@ namespace ExcelToSQLite.Services
             return records;
         }
 
-        public int GetRecordCount(string phoneFilter = "",
-            bool filterMiniThanTai = false, bool filterBigThanTai = false, bool filterLocPhat = false,
-            bool filterTuQuy = false, bool filterTuQuyGiua = false, bool filterTamHoaKep = false)
+        public int GetRecordCount(RecordFilterOptions filterOptions)
         {
             try
             {
@@ -212,17 +208,17 @@ namespace ExcelToSQLite.Services
                     // Build WHERE clause
                     var whereConditions = new List<string>();
 
-                    if (!string.IsNullOrWhiteSpace(phoneFilter))
+                    if (!string.IsNullOrWhiteSpace(filterOptions.PhoneFilter))
                     {
                         whereConditions.Add("Phone LIKE @PhoneFilter");
                     }
 
-                    if (filterMiniThanTai) whereConditions.Add("MiniThanTai = 1");
-                    if (filterBigThanTai) whereConditions.Add("BigThanTai = 1");
-                    if (filterLocPhat) whereConditions.Add("LocPhat = 1");
-                    if (filterTuQuy) whereConditions.Add("TuQuy = 1");
-                    if (filterTuQuyGiua) whereConditions.Add("TuQuyGiua = 1");
-                    if (filterTamHoaKep) whereConditions.Add("TamHoaKep = 1");
+                    if (filterOptions.FilterMiniThanTai) whereConditions.Add("MiniThanTai = 1");
+                    if (filterOptions.FilterBigThanTai) whereConditions.Add("BigThanTai = 1");
+                    if (filterOptions.FilterLocPhat) whereConditions.Add("LocPhat = 1");
+                    if (filterOptions.FilterTuQuy) whereConditions.Add("TuQuy = 1");
+                    if (filterOptions.FilterTuQuyGiua) whereConditions.Add("TuQuyGiua = 1");
+                    if (filterOptions.FilterTamHoaKep) whereConditions.Add("TamHoaKep = 1");
 
                     string whereClause = whereConditions.Count > 0
                         ? "WHERE " + string.Join(" OR ", whereConditions)
@@ -232,9 +228,9 @@ namespace ExcelToSQLite.Services
 
                     using (var command = new SQLiteCommand(countQuery, connection))
                     {
-                        if (!string.IsNullOrWhiteSpace(phoneFilter))
+                        if (!string.IsNullOrWhiteSpace(filterOptions.PhoneFilter))
                         {
-                            command.Parameters.AddWithValue("@PhoneFilter", "%" + phoneFilter + "%");
+                            command.Parameters.AddWithValue("@PhoneFilter", "%" + filterOptions.PhoneFilter + "%");
                         }
 
                         return Convert.ToInt32(command.ExecuteScalar());

@@ -55,39 +55,8 @@ namespace ExcelToSQLite.Services
                         // Only add valid phone numbers (exactly 9 digits after processing)
                         if (phone.Length == 9)
                         {
-                            // Check MINI thần tài: số thứ 8 (index 7) = "3" AND số thứ 9 (index 8) = "9"
-                            bool isMiniThanTai = phone[7] == '3' && phone[8] == '9';
-
-                            // Check BIG Thần tài: số thứ 8 = "7" AND số thứ 9 = "9"
-                            bool isBigThanTai = phone[7] == '7' && phone[8] == '9';
-
-                            // Check Lộc phát: số thứ 8 = "6" AND số thứ 9 = "8"
-                            bool isLocPhat = phone[7] == '6' && phone[8] == '8';
-
-                            // Check Tứ quý: 4 số cuối giống nhau (I=J=K=L)
-                            bool isTuQuy = phone[5] == phone[6] && phone[6] == phone[7] && phone[7] == phone[8];
-
-                            // Check Tứ quý giữa: có 4 số liên tiếp giống nhau ở giữa
-                            bool isTuQuyGiua = (phone[0] == phone[1] && phone[1] == phone[2] && phone[2] == phone[3]) ||
-                                                (phone[1] == phone[2] && phone[2] == phone[3] && phone[3] == phone[4]) ||
-                                                (phone[2] == phone[3] && phone[3] == phone[4] && phone[4] == phone[5]) ||
-                                                (phone[3] == phone[4] && phone[4] == phone[5] && phone[5] == phone[6]) ||
-                                                (phone[4] == phone[5] && phone[5] == phone[6] && phone[6] == phone[7]);
-
-                            // Check Tam hoa kép: G=H=I AND J=K=L
-                            bool isTamHoaKep = (phone[3] == phone[4] && phone[4] == phone[5]) &&
-                                                (phone[6] == phone[7] && phone[7] == phone[8]);
-
-                            var record = new Record
-                            {
-                                Phone = phone,
-                                MiniThanTai = isMiniThanTai,
-                                BigThanTai = isBigThanTai,
-                                LocPhat = isLocPhat,
-                                TuQuy = isTuQuy,
-                                TuQuyGiua = isTuQuyGiua,
-                                TamHoaKep = isTamHoaKep
-                            };
+                            var record = new Record { Phone = phone };
+                            ClassifyPhoneType(record);
                             records.Add(record);
                         }
                     }
@@ -99,6 +68,34 @@ namespace ExcelToSQLite.Services
             }
 
             return records;
+        }
+
+        private void ClassifyPhoneType(Record record)
+        {
+            string phone = record.Phone;
+
+            // Check MINI thần tài: số thứ 8 (index 7) = "3" AND số thứ 9 (index 8) = "9"
+            record.MiniThanTai = phone[7] == '3' && phone[8] == '9';
+
+            // Check BIG Thần tài: số thứ 8 = "7" AND số thứ 9 = "9"
+            record.BigThanTai = phone[7] == '7' && phone[8] == '9';
+
+            // Check Lộc phát: số thứ 8 = "6" AND số thứ 9 = "8"
+            record.LocPhat = phone[7] == '6' && phone[8] == '8';
+
+            // Check Tứ quý: 4 số cuối giống nhau (I=J=K=L)
+            record.TuQuy = phone[5] == phone[6] && phone[6] == phone[7] && phone[7] == phone[8];
+
+            // Check Tứ quý giữa: có 4 số liên tiếp giống nhau ở giữa
+            record.TuQuyGiua = (phone[0] == phone[1] && phone[1] == phone[2] && phone[2] == phone[3]) ||
+                                (phone[1] == phone[2] && phone[2] == phone[3] && phone[3] == phone[4]) ||
+                                (phone[2] == phone[3] && phone[3] == phone[4] && phone[4] == phone[5]) ||
+                                (phone[3] == phone[4] && phone[4] == phone[5] && phone[5] == phone[6]) ||
+                                (phone[4] == phone[5] && phone[5] == phone[6] && phone[6] == phone[7]);
+
+            // Check Tam hoa kép: G=H=I AND J=K=L
+            record.TamHoaKep = (phone[3] == phone[4] && phone[4] == phone[5]) &&
+                                (phone[6] == phone[7] && phone[7] == phone[8]);
         }
     }
 }

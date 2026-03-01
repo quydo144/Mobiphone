@@ -24,13 +24,7 @@ namespace ExcelToSQLite
         private bool _isInitialized = false;
 
         // Store current filter state
-        private string? _currentPhoneFilter = null;
-        private bool? _currentMiniThanTai = null;
-        private bool? _currentBigThanTai = null;
-        private bool? _currentLocPhat = null;
-        private bool? _currentTuQuy = null;
-        private bool? _currentTuQuyGiua = null;
-        private bool? _currentTamHoaKep = null;
+        private RecordFilterOptions _currentFilter = new RecordFilterOptions();
 
         public MainWindow()
         {
@@ -331,30 +325,18 @@ namespace ExcelToSQLite
             }
         }
 
-        private void LoadDataFromDatabase(string? phoneFilter = null,
-            bool? miniThanTai = null, bool? bigThanTai = null, bool? locPhat = null,
-            bool? tuQuy = null, bool? tuQuyGiua = null, bool? tamHoaKep = null)
+        private void LoadDataFromDatabase(RecordFilterOptions? filterOptions = null)
         {
             // Save current filter state
-            _currentPhoneFilter = phoneFilter;
-            _currentMiniThanTai = miniThanTai;
-            _currentBigThanTai = bigThanTai;
-            _currentLocPhat = locPhat;
-            _currentTuQuy = tuQuy;
-            _currentTuQuyGiua = tuQuyGiua;
-            _currentTamHoaKep = tamHoaKep;
+            if (filterOptions != null)
+            {
+                _currentFilter = filterOptions;
+            }
 
             try
             {
                 // Get filtered count for pagination
-                _filteredRecords = _databaseService.GetRecordCount(
-                    phoneFilter ?? "",
-                    miniThanTai == true,
-                    bigThanTai == true,
-                    locPhat == true,
-                    tuQuy == true,
-                    tuQuyGiua == true,
-                    tamHoaKep == true);
+                _filteredRecords = _databaseService.GetRecordCount(_currentFilter);
                 _totalPages = (_filteredRecords + _pageSize - 1) / _pageSize; // Ceiling division
 
                 if (_totalPages == 0) _totalPages = 1;
@@ -363,18 +345,11 @@ namespace ExcelToSQLite
 
                 // Get paginated records with filters
                 var records = _databaseService.GetRecordsWithPagination(
-                    _currentPage, _pageSize,
-                    phoneFilter ?? "",
-                    miniThanTai == true,
-                    bigThanTai == true,
-                    locPhat == true,
-                    tuQuy == true,
-                    tuQuyGiua == true,
-                    tamHoaKep == true);
+                    _currentPage, _pageSize, _currentFilter);
                 dgData.ItemsSource = records;
 
                 // Get total count in database (without filter) for Total Records display
-                _totalRecords = _databaseService.GetRecordCount("", false, false, false, false, false, false);
+                _totalRecords = _databaseService.GetRecordCount(new RecordFilterOptions());
 
                 // Update UI
                 txtRecordCount.Text = _totalRecords.ToString();
@@ -396,8 +371,7 @@ namespace ExcelToSQLite
         private void BtnFirstPage_Click(object sender, RoutedEventArgs e)
         {
             _currentPage = 1;
-            LoadDataFromDatabase(_currentPhoneFilter, _currentMiniThanTai, _currentBigThanTai,
-                _currentLocPhat, _currentTuQuy, _currentTuQuyGiua, _currentTamHoaKep);
+            LoadDataFromDatabase();
         }
 
         private void BtnPrevPage_Click(object sender, RoutedEventArgs e)
@@ -405,8 +379,7 @@ namespace ExcelToSQLite
             if (_currentPage > 1)
             {
                 _currentPage--;
-                LoadDataFromDatabase(_currentPhoneFilter, _currentMiniThanTai, _currentBigThanTai,
-                    _currentLocPhat, _currentTuQuy, _currentTuQuyGiua, _currentTamHoaKep);
+                LoadDataFromDatabase();
             }
         }
 
@@ -415,16 +388,14 @@ namespace ExcelToSQLite
             if (_currentPage < _totalPages)
             {
                 _currentPage++;
-                LoadDataFromDatabase(_currentPhoneFilter, _currentMiniThanTai, _currentBigThanTai,
-                    _currentLocPhat, _currentTuQuy, _currentTuQuyGiua, _currentTamHoaKep);
+                LoadDataFromDatabase();
             }
         }
 
         private void BtnLastPage_Click(object sender, RoutedEventArgs e)
         {
             _currentPage = _totalPages;
-            LoadDataFromDatabase(_currentPhoneFilter, _currentMiniThanTai, _currentBigThanTai,
-                _currentLocPhat, _currentTuQuy, _currentTuQuyGiua, _currentTamHoaKep);
+            LoadDataFromDatabase();
         }
 
         private void CmbPageSize_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -435,32 +406,30 @@ namespace ExcelToSQLite
             var selectedItem = (System.Windows.Controls.ComboBoxItem)cmbPageSize.SelectedItem;
             _pageSize = int.Parse(selectedItem.Content.ToString() ?? "100");
             _currentPage = 1; // Reset to first page when page size changes
-            LoadDataFromDatabase(_currentPhoneFilter, _currentMiniThanTai, _currentBigThanTai,
-                _currentLocPhat, _currentTuQuy, _currentTuQuyGiua, _currentTamHoaKep);
+            LoadDataFromDatabase();
         }
 
         private void BtnApplyFilter_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                // Read filter values
-                string? phoneFilter = string.IsNullOrWhiteSpace(txtFilterPhone.Text)
-                    ? null
-                    : txtFilterPhone.Text.Trim();
-
-                bool? miniThanTai = chkFilterMiniThanTai.IsChecked == true ? true : null;
-                bool? bigThanTai = chkFilterBigThanTai.IsChecked == true ? true : null;
-                bool? locPhat = chkFilterLocPhat.IsChecked == true ? true : null;
-                bool? tuQuy = chkFilterTuQuy.IsChecked == true ? true : null;
-                bool? tuQuyGiua = chkFilterTuQuyGiua.IsChecked == true ? true : null;
-                bool? tamHoaKep = chkFilterTamHoaKep.IsChecked == true ? true : null;
+                // Create filter options from UI controls
+                var filterOptions = new RecordFilterOptions
+                {
+                    PhoneFilter = string.IsNullOrWhiteSpace(txtFilterPhone.Text) ? "" : txtFilterPhone.Text.Trim(),
+                    FilterMiniThanTai = chkFilterMiniThanTai.IsChecked == true,
+                    FilterBigThanTai = chkFilterBigThanTai.IsChecked == true,
+                    FilterLocPhat = chkFilterLocPhat.IsChecked == true,
+                    FilterTuQuy = chkFilterTuQuy.IsChecked == true,
+                    FilterTuQuyGiua = chkFilterTuQuyGiua.IsChecked == true,
+                    FilterTamHoaKep = chkFilterTamHoaKep.IsChecked == true
+                };
 
                 // Reset to first page when applying filter
                 _currentPage = 1;
 
                 // Load data with filters
-                LoadDataFromDatabase(phoneFilter, miniThanTai, bigThanTai, locPhat,
-                    tuQuy, tuQuyGiua, tamHoaKep);
+                LoadDataFromDatabase(filterOptions);
 
                 txtFilterStatus.Text = $"Filter applied. Found {_filteredRecords} records.";
                 txtFilterStatus.Foreground = System.Windows.Media.Brushes.Blue;
@@ -489,7 +458,7 @@ namespace ExcelToSQLite
                 _currentPage = 1;
 
                 // Load all data without filters
-                LoadDataFromDatabase();
+                LoadDataFromDatabase(new RecordFilterOptions());
 
                 txtFilterStatus.Text = $"Filter cleared. Showing all {_totalRecords} records.";
                 txtFilterStatus.Foreground = System.Windows.Media.Brushes.Green;
@@ -498,6 +467,35 @@ namespace ExcelToSQLite
             {
                 MessageBox.Show($"Error clearing filter: {ex.Message}", "Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void DgData_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            // Check if Ctrl+C is pressed
+            if (e.Key == System.Windows.Input.Key.C &&
+                (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) == System.Windows.Input.ModifierKeys.Control)
+            {
+                CopySelectedPhoneNumber();
+                e.Handled = true; // Prevent default DataGrid copy behavior
+            }
+        }
+
+        private void CopySelectedPhoneNumber()
+        {
+            if (dgData.SelectedItem is Record selectedRecord)
+            {
+                try
+                {
+                    System.Windows.Clipboard.SetText(selectedRecord.Phone);
+                    txtFilterStatus.Text = $"Copied: {selectedRecord.Phone}";
+                    txtFilterStatus.Foreground = System.Windows.Media.Brushes.Green;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error copying to clipboard: {ex.Message}", "Error",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
     }

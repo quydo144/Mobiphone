@@ -3,6 +3,10 @@
         "/^dotnet build$/": {
             "approve": true,
             "matchCommandLine": true
+        },
+        "/^dotnet run$/": {
+            "approve": true,
+            "matchCommandLine": true
         }
     }
 }
