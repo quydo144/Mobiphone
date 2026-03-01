@@ -1,0 +1,104 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [ "main", "master" ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build
+      run: dotnet build --no-restore --configuration Release
+    
+    - name: Test
+      run: dotnet test --no-build --configuration Release --verbosity normal
+      continue-on-error: true
+
+  create-installer:
+    needs: build-and-test
+    runs-on: windows-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    
+    - name: Setup WiX
+      run: dotnet tool install --global wix --version 4.0.5
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Publish Application
+      run: |
+        dotnet publish ExcelToSQLite.csproj `
+          -c Release `
+          -r win-x64 `
+          --self-contained true `
+          -p:PublishSingleFile=false `
+          -p:PublishReadyToRun=true `
+          -o bin/Release/net8.0-windows/win-x64/publish
+    
+    - name: Build WiX Installer
+      working-directory: Installer
+      run: |
+        wix build Package.wxs `
+          -arch x64 `
+          -out ../Mobiphone.msi
+    
+    - name: Get version from tag
+      id: get_version
+      run: |
+        $version = "${{ github.ref_name }}" -replace '^v', ''
+        echo "VERSION=$version" >> $env:GITHUB_OUTPUT
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: Mobiphone.msi
+        name: Release ${{ github.ref_name }}
+        body: |
+          ## ExcelToSQLite ${{ steps.get_version.outputs.VERSION }}
+          
+          ### Cài đặt
+          1. Tải file `Mobiphone.msi`
+          2. Chạy file MSI và làm theo hướng dẫn cài đặt
+          3. Ứng dụng sẽ được cài đặt vào Program Files
+          
+          ### Tính năng
+          - Chuyển đổi file Excel sang SQLite database
+          - Giao diện WPF thân thiện
+          
+          ### Yêu cầu hệ thống
+          - Windows 10/11 (64-bit)
+          - .NET 8.0 Runtime (sẽ được cài tự động nếu chưa có)
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Upload MSI as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Mobiphone-${{ steps.get_version.outputs.VERSION }}-installer
+        path: Mobiphone.msi

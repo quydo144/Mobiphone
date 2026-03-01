@@ -49,7 +49,25 @@
 
 ## Yêu cầu
 
-- .NET 8.0 hoặc cao hơn
+- .NET 8.0 Runtime (sẽ được cài tự động khi cài MSI)
+- Windows 10/11 (64-bit)
+
+## Cài đặt cho người dùng cuối
+
+### Download và cài đặt từ MSI (Khuyến nghị)
+
+1. Truy cập trang [Releases](../../releases) của repository
+2. Tải file `Mobiphone.msi` từ phiên bản mới nhất
+3. Double-click file MSI và làm theo hướng dẫn
+4. Ứng dụng sẽ được cài đặt vào `C:\Program Files\ExcelToSQLite`
+5. Shortcut tự động xuất hiện trong Start Menu
+
+**Lưu ý**: Windows Defender có thể cảnh báo vì đây là ứng dụng chưa được ký số. Chọn "More info" → "Run anyway" để tiếp tục.
+
+## Phát triển (Development)
+
+### Yêu cầu
+- .NET 8.0 SDK hoặc cao hơn
 - Windows OS
 
 ## Cài đặt và chạy
@@ -177,3 +195,35 @@ Database SQLite sẽ được tạo tự động tại thư mục bin với tên
 - Nhấn **F5** để bắt đầu debug
 - Đặt breakpoint bằng cách click vào lề trái
 - Xem giá trị biến, step through code
+
+## Release mới (Cho Developer)
+
+Để tạo phiên bản release mới với MSI installer:
+
+```bash
+# Commit các thay đổi
+git add .
+git commit -m "Your changes"
+git push
+
+# Tạo tag với format v*
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+GitHub Actions sẽ tự động:
+- Build và test ứng dụng
+- Tạo file MSI installer
+- Tạo GitHub Release
+- Upload MSI file để người dùng download
+
+Chi tiết xem file [RELEASE.md](RELEASE.md).
+
+## CI/CD
+
+Project sử dụng GitHub Actions để:
+- **Build & Test**: Tự động chạy mỗi khi push code hoặc tạo PR
+- **Create Release**: Tự động tạo MSI installer khi push tags v*
+- **Artifact Upload**: Lưu trữ MSI files trong GitHub Releases
+
+Xem workflow tại [.github/workflows/build-release.yml](.github/workflows/build-release.yml)
