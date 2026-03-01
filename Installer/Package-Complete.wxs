@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Simplified WiX Package that includes all files from publish directory
+  Compatible with WiX Toolset 4.x
+-->
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package Name="Mobiphone" 
+           Manufacturer="Mobiphone" 
+           Version="1.0.0.0"
+           UpgradeCode="12345678-1234-1234-1234-123456789012">
+    
+    <MajorUpgrade DowngradeErrorMessage="Đã cài đặt phiên bản mới hơn của [ProductName]." />
+    
+    <MediaTemplate EmbedCab="yes" />
+    
+    <Feature Id="ProductFeature" Title="Mobiphone Application" Level="1">
+      <ComponentRef Id="MainExecutable" />
+      <ComponentRef Id="ApplicationShortcutStartMenu" />
+      <ComponentRef Id="ApplicationShortcutDesktop" />
+    </Feature>
+  </Package>
+
+  <Fragment>
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="Mobiphone" />
+    </StandardDirectory>
+    
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Directory Id="ApplicationProgramsFolder" Name="Mobiphone" />
+    </StandardDirectory>
+    
+    <StandardDirectory Id="DesktopFolder" />
+  </Fragment>
+
+  <Fragment>
+    <!-- Main application files -->
+    <Component Id="MainExecutable" Directory="INSTALLFOLDER">
+      <!-- Main EXE -->
+      <File Id="MobiphoneExe" 
+            Source="..\bin\Release\net8.0-windows\win-x64\publish\Mobiphone.exe" 
+            KeyPath="yes" />
+      
+      <!-- DLL files -->
+      <File Id="MobiphoneDll" 
+            Source="..\bin\Release\net8.0-windows\win-x64\publish\Mobiphone.dll" />
+      
+      <!-- EPPlus dependencies -->
+      <File Id="EPPlusDll" 
+            Source="..\bin\Release\net8.0-windows\win-x64\publish\EPPlus.dll" />
+      <File Id="EPPlusInterfacesDll" 
+            Source="..\bin\Release\net8.0-windows\win-x64\publish\EPPlus.Interfaces.dll" />
+      <File Id="EPPlusSystemDrawingDll" 
+            Source="..\bin\Release\net8.0-windows\win-x64\publish\EPPlus.System.Drawing.dll" />
+      
+      <!-- SQLite dependencies -->
+      <File Id="SQLiteCoreDll" 
+            Source="..\bin\Release\net8.0-windows\win-x64\publish\System.Data.SQLite.dll" />
+      
+      <!-- SQLite native libraries -->
+      <File Id="SQLiteInteropDll" 
+            Source="..\bin\Release\net8.0-windows\win-x64\publish\SQLite.Interop.dll" />
+      
+      <!-- System dependencies -->
+      <File Id="SystemIOCompressionDll" 
+            Source="..\bin\Release\net8.0-windows\win-x64\publish\System.IO.Compression.dll" />
+      <File Id="SystemSecurityCryptographyDll" 
+            Source="..\bin\Release\net8.0-windows\win-x64\publish\System.Security.Cryptography.Pkcs.dll" />
+      <File Id="SystemSecurityCryptographyXmlDll" 
+            Source="..\bin\Release\net8.0-windows\win-x64\publish\System.Security.Cryptography.Xml.dll" />
+      
+      <!-- Microsoft dependencies -->
+      <File Id="MicrosoftWin32SystemEventsDll" 
+            Source="..\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Win32.SystemEvents.dll" />
+      <File Id="SystemDrawingCommonDll" 
+            Source="..\bin\Release\net8.0-windows\win-x64\publish\System.Drawing.Common.dll" />
+      
+      <!-- Configuration files -->
+      <File Id="MobiphoneRuntimeConfig" 
+            Source="..\bin\Release\net8.0-windows\win-x64\publish\Mobiphone.runtimeconfig.json" />
+      <File Id="MobiphoneDepsJson" 
+            Source="..\bin\Release\net8.0-windows\win-x64\publish\Mobiphone.deps.json" />
+      
+      <!-- PDB for debugging (optional) -->
+      <File Id="MobiphonePdb" 
+            Source="..\bin\Release\net8.0-windows\win-x64\publish\Mobiphone.pdb" />
+    </Component>
+
+    <!-- Start Menu Shortcut -->
+    <Component Id="ApplicationShortcutStartMenu" Directory="ApplicationProgramsFolder">
+      <Shortcut Id="StartMenuShortcut"
+                Name="Mobiphone"
+                Description="Chuyển đổi Excel sang SQLite"
+                Target="[INSTALLFOLDER]Mobiphone.exe"
+                WorkingDirectory="INSTALLFOLDER"
+                Icon="AppIcon"
+                IconIndex="0" />
+      <RemoveFolder Id="CleanUpStartMenu" On="uninstall" />
+      <RegistryValue Root="HKCU" 
+                     Key="Software\Mobiphone" 
+                     Name="StartMenuShortcut" 
+                     Type="integer" 
+                     Value="1" 
+                     KeyPath="yes" />
+    </Component>
+
+    <!-- Desktop Shortcut -->
+    <Component Id="ApplicationShortcutDesktop" Directory="DesktopFolder">
+      <Shortcut Id="DesktopShortcut"
+                Name="Mobiphone"
+                Description="Chuyển đổi Excel sang SQLite"
+                Target="[INSTALLFOLDER]Mobiphone.exe"
+                WorkingDirectory="INSTALLFOLDER"
+                Icon="AppIcon"
+                IconIndex="0" />
+      <RegistryValue Root="HKCU" 
+                     Key="Software\Mobiphone" 
+                     Name="DesktopShortcut" 
+                     Type="integer" 
+                     Value="1" 
+                     KeyPath="yes" />
+    </Component>
+  </Fragment>
+
+  <Fragment>
+    <Icon Id="AppIcon" SourceFile="..\bin\Release\net8.0-windows\win-x64\publish\Mobiphone.exe" />
+  </Fragment>
+</Wix>

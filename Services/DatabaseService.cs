@@ -11,9 +11,23 @@ namespace Mobiphone.Services
 
         public DatabaseService()
         {
-            _databasePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "records.db");
+            // Use LocalApplicationData to store database (writable location)
+            string appDataPath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "Mobiphone"
+            );
+            
+            // Create directory if it doesn't exist
+            if (!Directory.Exists(appDataPath))
+            {
+                Directory.CreateDirectory(appDataPath);
+            }
+            
+            _databasePath = Path.Combine(appDataPath, "records.db");
             _connectionString = $"Data Source={_databasePath};Version=3;";
         }
+
+        public string DatabasePath => _databasePath;
 
         public void InitializeDatabase()
         {
