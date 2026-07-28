@@ -67,6 +67,6 @@
   </Fragment>
 
   <Fragment>
-    <Icon Id="AppIcon" SourceFile="icon.ico" />
+    <Icon Id="AppIcon" SourceFile="..\icon.ico" />
   </Fragment>
 </Wix>

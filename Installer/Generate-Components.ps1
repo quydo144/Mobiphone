@@ -30,7 +30,7 @@ function Get-SafeId {
 }
 
 if (-not (Test-Path $PublishPath)) {
-    Write-Host "❌ Publish path not found: $PublishPath" -ForegroundColor Red
+    Write-Host "Publish path not found: $PublishPath" -ForegroundColor Red
     exit 1
 }
 
@@ -85,4 +85,4 @@ $xml = $xmlHeader + $xmlFooter
 # Write to output file
 $xml | Out-File -FilePath $OutputFile -Encoding UTF8
 
-Write-Host "✅ Generated $($files.Count) components in $OutputFile" -ForegroundColor Green
+Write-Host "Generated $($files.Count) components in $OutputFile" -ForegroundColor Green
