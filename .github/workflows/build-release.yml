@@ -76,7 +76,7 @@ jobs:
         wix build Package.wxs HarvestedFiles.wxs `
           -arch x64 `
           -d PublishDir=..\bin\Release\net8.0-windows\win-x64\publish `
-          -out ../Mobiphone.msi
+          -out ../SC Hoang Quoc.msi
     
     - name: Get version from tag
       id: get_version
@@ -87,19 +87,19 @@ jobs:
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
-        files: Mobiphone.msi
+        files: SC Hoang Quoc.msi
         name: Release ${{ github.ref_name }}
         body: |
-          ## Mobiphone ${{ steps.get_version.outputs.VERSION }}
+          ## SC Hoang Quoc ${{ steps.get_version.outputs.VERSION }}
           
           ### Cài đặt
-          1. Tải file `Mobiphone.msi`
+          1. Tải file `SC Hoang Quoc.msi`
           2. Double-click file MSI và làm theo hướng dẫn cài đặt
-          3. Ứng dụng sẽ được cài đặt vào `C:\Program Files\Mobiphone\`
+          3. Ứng dụng sẽ được cài đặt vào `C:\Program Files\SC Hoang Quoc\`
           4. Shortcuts sẽ được tạo trong Start Menu và Desktop
           
           ### Lưu ý quan trọng
-          - **Database location**: `%LOCALAPPDATA%\Mobiphone\records.db`
+          - **Database location**: `%LOCALAPPDATA%\SC Hoang Quoc\records.db`
           - Dữ liệu được lưu trong thư mục AppData của user (có quyền write đầy đủ)
           - MSI bao gồm đầy đủ dependencies (~60MB)
 
@@ -111,5 +111,5 @@ jobs:
     - name: Upload MSI as artifact
       uses: actions/upload-artifact@v4
       with:
-        name: Mobiphone-${{ steps.get_version.outputs.VERSION }}-installer
-        path: Mobiphone.msi
+        name: SC Hoang Quoc-${{ steps.get_version.outputs.VERSION }}-installer
+        path: SC Hoang Quoc.msi

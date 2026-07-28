@@ -70,7 +70,7 @@ foreach ($file in $files) {
     $guid = New-Guid
     
     # Decide KeyPath - main exe should be one
-    $keyPath = if ($file.Name -eq "Mobiphone.exe") { "yes" } else { "yes" }
+    $keyPath = if ($file.Name -eq "SC Hoang Quoc.exe") { "yes" } else { "yes" }
     
     $xmlHeader += @"
 

@@ -6,7 +6,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/bin/Debug/net8.0-windows/Mobiphone.dll",
+            "program": "${workspaceFolder}/bin/Debug/net8.0-windows/SC Hoang Quoc.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,

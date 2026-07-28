@@ -4,8 +4,8 @@
   Compatible with WiX Toolset 4.x
 -->
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
-  <Package Name="Mobiphone" 
-           Manufacturer="Mobiphone" 
+  <Package Name="SC Hoang Quoc" 
+           Manufacturer="SC Hoang Quoc" 
            Version="1.0.0.0"
            UpgradeCode="12345678-1234-1234-1234-123456789012">
     
@@ -13,7 +13,7 @@
     
     <MediaTemplate EmbedCab="yes" />
     <Property Id="ARPPRODUCTICON" Value="AppIcon" />
-    <Feature Id="ProductFeature" Title="Mobiphone Application" Level="1">
+    <Feature Id="ProductFeature" Title="SC Hoang Quoc Application" Level="1">
       <ComponentRef Id="MainExecutable" />
       <ComponentRef Id="ApplicationShortcutStartMenu" />
       <ComponentRef Id="ApplicationShortcutDesktop" />
@@ -22,11 +22,11 @@
 
   <Fragment>
     <StandardDirectory Id="ProgramFiles64Folder">
-      <Directory Id="INSTALLFOLDER" Name="Mobiphone" />
+      <Directory Id="INSTALLFOLDER" Name="SC Hoang Quoc" />
     </StandardDirectory>
     
     <StandardDirectory Id="ProgramMenuFolder">
-      <Directory Id="ApplicationProgramsFolder" Name="Mobiphone" />
+      <Directory Id="ApplicationProgramsFolder" Name="SC Hoang Quoc" />
     </StandardDirectory>
     
     <StandardDirectory Id="DesktopFolder" />
@@ -36,13 +36,13 @@
     <!-- Main application files -->
     <Component Id="MainExecutable" Directory="INSTALLFOLDER">
       <!-- Main EXE -->
-      <File Id="MobiphoneExe" 
-            Source="..\bin\Release\net8.0-windows\win-x64\publish\Mobiphone.exe" 
+      <File Id="SCHoangQuocExe" 
+            Source="..\bin\Release\net8.0-windows\win-x64\publish\SC Hoang Quoc.exe" 
             KeyPath="yes" />
       
       <!-- DLL files -->
-      <File Id="MobiphoneDll" 
-            Source="..\bin\Release\net8.0-windows\win-x64\publish\Mobiphone.dll" />
+      <File Id="SCHoangQuocDll" 
+            Source="..\bin\Release\net8.0-windows\win-x64\publish\SC Hoang Quoc.dll" />
       
       <!-- EPPlus dependencies -->
       <File Id="EPPlusDll" 
@@ -75,28 +75,28 @@
             Source="..\bin\Release\net8.0-windows\win-x64\publish\System.Drawing.Common.dll" />
       
       <!-- Configuration files -->
-      <File Id="MobiphoneRuntimeConfig" 
-            Source="..\bin\Release\net8.0-windows\win-x64\publish\Mobiphone.runtimeconfig.json" />
-      <File Id="MobiphoneDepsJson" 
-            Source="..\bin\Release\net8.0-windows\win-x64\publish\Mobiphone.deps.json" />
+      <File Id="SCHoangQuocRuntimeConfig" 
+            Source="..\bin\Release\net8.0-windows\win-x64\publish\SC Hoang Quoc.runtimeconfig.json" />
+      <File Id="SCHoangQuocDepsJson" 
+            Source="..\bin\Release\net8.0-windows\win-x64\publish\SC Hoang Quoc.deps.json" />
       
       <!-- PDB for debugging (optional) -->
-      <File Id="MobiphonePdb" 
-            Source="..\bin\Release\net8.0-windows\win-x64\publish\Mobiphone.pdb" />
+      <File Id="SCHoangQuocPdb" 
+            Source="..\bin\Release\net8.0-windows\win-x64\publish\SC Hoang Quoc.pdb" />
     </Component>
 
     <!-- Start Menu Shortcut -->
     <Component Id="ApplicationShortcutStartMenu" Directory="ApplicationProgramsFolder">
       <Shortcut Id="StartMenuShortcut"
-                Name="Mobiphone"
+                Name="SC Hoang Quoc"
                 Description="Chuyển đổi Excel sang SQLite"
-                Target="[INSTALLFOLDER]Mobiphone.exe"
+                Target="[INSTALLFOLDER]SC Hoang Quoc.exe"
                 WorkingDirectory="INSTALLFOLDER"
                 Icon="AppIcon"
                 IconIndex="0" />
       <RemoveFolder Id="CleanUpStartMenu" On="uninstall" />
       <RegistryValue Root="HKCU" 
-                     Key="Software\Mobiphone" 
+                     Key="Software\SC Hoang Quoc" 
                      Name="StartMenuShortcut" 
                      Type="integer" 
                      Value="1" 
@@ -106,14 +106,14 @@
     <!-- Desktop Shortcut -->
     <Component Id="ApplicationShortcutDesktop" Directory="DesktopFolder">
       <Shortcut Id="DesktopShortcut"
-                Name="Mobiphone"
+                Name="SC Hoang Quoc"
                 Description="Chuyển đổi Excel sang SQLite"
-                Target="[INSTALLFOLDER]Mobiphone.exe"
+                Target="[INSTALLFOLDER]SC Hoang Quoc.exe"
                 WorkingDirectory="INSTALLFOLDER"
                 Icon="AppIcon"
                 IconIndex="0" />
       <RegistryValue Root="HKCU" 
-                     Key="Software\Mobiphone" 
+                     Key="Software\SC Hoang Quoc" 
                      Name="DesktopShortcut" 
                      Type="integer" 
                      Value="1" 

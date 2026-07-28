@@ -10,8 +10,9 @@
     <Version>1.0.0</Version>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
-    <Company>Mobiphone</Company>
-    <Product>Mobiphone</Product>
+    <Company>SC Hoang Quoc</Company>
+    <Product>SC Hoang Quoc</Product>
+    <AssemblyName>SC Hoang Quoc</AssemblyName>
     <Description>Excel to SQLite Converter</Description>
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>

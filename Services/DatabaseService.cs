@@ -14,7 +14,7 @@ namespace Mobiphone.Services
             // Use LocalApplicationData to store database (writable location)
             string appDataPath = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                "Mobiphone"
+                "SC Hoang Quoc"
             );
 
             // Create directory if it doesn't exist

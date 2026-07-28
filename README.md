@@ -1,4 +1,4 @@
-# Excel to SQLite Importer - Mobiphone SIM Manager
+# SC Hoang Quoc
 
 Ứng dụng WPF để quản lý và phân loại số điện thoại từ file Excel vào SQLite database với tính năng phân loại sim đặc biệt, filter nâng cao và hiệu suất cao.
 
@@ -12,35 +12,12 @@
 ### Download và cài đặt từ MSI (Khuyến nghị)
 
 1. Truy cập trang [Releases](../../releases) của repository
-2. Tải file `Mobiphone.msi` từ phiên bản mới nhất
+2. Tải file `SC Hoang Quoc.msi` từ phiên bản mới nhất
 3. Double-click file MSI và làm theo hướng dẫn
-4. Ứng dụng sẽ được cài đặt vào `C:\Program Files\Mobiphone`
+4. Ứng dụng sẽ được cài đặt vào `C:\Program Files\SC Hoang Quoc`
 5. Shortcut tự động xuất hiện trong Start Menu
 
 **Lưu ý**: Windows Defender có thể cảnh báo vì đây là ứng dụng chưa được ký số. Chọn "More info" → "Run anyway" để tiếp tục.
-
-## Phát triển (Development)
-
-### Yêu cầu
-- .NET 8.0 SDK hoặc cao hơn
-- Windows OS
-
-## Cài đặt và chạy
-
-1. Mở terminal và chạy lệnh để restore packages:
-```powershell
-dotnet restore Mobiphone.sln
-```
-
-2. Build project:
-```powershell
-dotnet build Mobiphone.sln
-```
-
-3. Chạy ứng dụng:
-```powershell
-dotnet run --project Mobiphone.csproj
-```
 
 ## Cấu trúc file Excel
 
@@ -57,27 +34,6 @@ File Excel cần có cấu trúc như sau (dòng đầu tiên là header):
 - Nếu 10 số bắt đầu bằng 0, số 0 sẽ được bỏ đi tự động
 - Chỉ lưu phone có đúng 9 chữ số vào database
 - Hỗ trợ nhiều file Excel trong cùng một folder
-
-## Cấu trúc project
-
-```
-Mobiphone/
-├── Models/
-│   ├── Record.cs              # Model class (Id, Phone, 6 sim types)
-│   └── RecordFilterOptions.cs # Filter options model
-├── Services/
-│   ├── ExcelService.cs        # Service đọc file Excel
-│   └── DatabaseService.cs     # Service xử lý SQLite
-├── bin/                       # Build output
-├── obj/                       # Build intermediates
-├── App.xaml                   # Application definition
-├── App.xaml.cs                # Application code-behind
-├── MainWindow.xaml            # Main UI với pagination & filter
-├── MainWindow.xaml.cs         # Main window code-behind
-├── Mobiphone.csproj           # Project file
-├── Mobiphone.sln              # Solution file
-├── README.md                  # Documentation
-```
 
 ## Packages sử dụng
 
@@ -143,8 +99,8 @@ Script này sẽ:
 5. ✅ Build MSI installer
 
 Kết quả:
-- `bin\Release\net8.0-windows\win-x64\publish\Mobiphone.exe` - Single-file executable
-- `Mobiphone.msi` - MSI installer
+- `bin\Release\net8.0-windows\win-x64\publish\SC Hoang Quoc.exe` - Single-file executable
+- `SC Hoang Quoc.msi` - MSI installer
 
 ### Cleanup các file tạm thời
 

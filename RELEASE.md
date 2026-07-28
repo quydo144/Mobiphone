@@ -36,7 +36,7 @@ Khi muốn release phiên bản mới cho user:
 
 4. **User có thể**:
    - Vào trang Releases của repository
-   - Download file `Mobiphone.msi`
+   - Download file `SC Hoang Quoc.msi`
    - Double-click để cài đặt
    - Ứng dụng sẽ được cài vào Program Files
    - Shortcut tự động tạo trong Start Menu
@@ -58,13 +58,13 @@ Script này thực hiện:
 5. Build MSI installer với WiX
 
 ### Kết quả:
-- ✅ `bin\Release\net8.0-windows\win-x64\publish\Mobiphone.exe` - Executable
-- ✅ `Mobiphone.msi` - MSI installer
+- ✅ `bin\Release\net8.0-windows\win-x64\publish\SC Hoang Quoc.exe` - Executable
+- ✅ `SC Hoang Quoc.msi` - MSI installer
 
 ### Test MSI installer:
 ```powershell
 # Install locally để test
-.\Mobiphone.msi
+.\SC Hoang Quoc.msi
 
 # Sau khi test xong, uninstall qua Settings -> Apps
 ```

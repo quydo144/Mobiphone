@@ -98,7 +98,7 @@ echo.
 echo [7/7] Building MSI installer...
 wix extension add WixToolset.Util.wixext 2>nul
 cd Installer
-wix build Package.wxs HarvestedFiles.wxs -arch x64 -d PublishDir=..\bin\Release\net8.0-windows\win-x64\publish -out ..\Mobiphone.msi
+wix build Package.wxs HarvestedFiles.wxs -arch x64 -d PublishDir=..\bin\Release\net8.0-windows\win-x64\publish -out ..\SC Hoang Quoc.msi
 set BUILD_RESULT=%errorlevel%
 cd ..
 
@@ -112,8 +112,8 @@ echo ================================================
 echo Build Complete!
 echo ================================================
 echo.
-echo MSI Installer: Mobiphone.msi
-for %%F in (Mobiphone.msi) do echo Size: %%~zF bytes
+echo MSI Installer: SC Hoang Quoc.msi
+for %%F in (SC Hoang Quoc.msi) do echo Size: %%~zF bytes
 echo.
 pause
 goto menu
@@ -125,18 +125,18 @@ echo Reinstall Mobiphone
 echo ================================================
 echo.
 
-if not exist "Mobiphone.msi" (
-    echo Không tìm thấy Mobiphone.msi!
+if not exist "SC Hoang Quoc.msi" (
+    echo Không tìm thấy SC Hoang Quoc.msi!
     echo Chạy Build MSI trước.
     pause
     goto menu
 )
 
 echo [1/3] Kiểm tra phiên bản cũ...
-wmic product where "name='Mobiphone'" get name,version 2>nul | findstr /i "Mobiphone" >nul
+wmic product where "name='SC Hoang Quoc'" get name,version 2>nul | findstr /i "SC Hoang Quoc" >nul
 if not errorlevel 1 (
     echo Đang gỡ phiên bản cũ...
-    wmic product where "name='Mobiphone'" call uninstall /nointeractive >nul 2>&1
+    wmic product where "name='SC Hoang Quoc'" call uninstall /nointeractive >nul 2>&1
     echo Đã gỡ phiên bản cũ
     timeout /t 2 >nul
 ) else (
@@ -145,12 +145,12 @@ if not errorlevel 1 (
 echo.
 
 echo [2/3] Dọn dẹp registry...
-reg delete "HKCU\Software\Mobiphone" /f >nul 2>&1
+reg delete "HKCU\Software\SC Hoang Quoc" /f >nul 2>&1
 echo Registry cleaned
 echo.
 
 echo [3/3] Cài đặt phiên bản mới...
-msiexec /i "%CD%\Mobiphone.msi" /qb
+msiexec /i "%CD%\MobiSC Hoang Quocphone.msi" /qb
 echo Cài đặt hoàn tất!
 echo.
 
@@ -159,19 +159,19 @@ echo Kiểm Tra Cài Đặt
 echo ================================================
 echo.
 
-if exist "C:\Program Files\Mobiphone\Mobiphone.exe" (
+if exist "C:\Program Files\SC Hoang Quoc\SC Hoang Quoc.exe" (
     echo [OK] Executable
 ) else (
     echo [FAIL] Executable
 )
 
-if exist "C:\Program Files\Mobiphone\SQLite.Interop.dll" (
+if exist "C:\Program Files\SC Hoang Quoc\SQLite.Interop.dll" (
     echo [OK] SQLite DLL
 ) else (
     echo [FAIL] SQLite DLL
 )
 
-if exist "%USERPROFILE%\Desktop\Mobiphone.lnk" (
+if exist "%USERPROFILE%\Desktop\SC Hoang Quoc.lnk" (
     echo [OK] Desktop Shortcut
 ) else (
     echo [FAIL] Desktop Shortcut
@@ -179,14 +179,14 @@ if exist "%USERPROFILE%\Desktop\Mobiphone.lnk" (
 
 echo.
 echo Database location:
-echo %LOCALAPPDATA%\Mobiphone\records.db
+echo %LOCALAPPDATA%\SC Hoang Quoc\records.db
 echo.
 
 set /p launch="Mở ứng dụng ngay? (Y/N): "
 if /i "%launch%"=="Y" (
-    start "" "C:\Program Files\Mobiphone\Mobiphone.exe"
+    start "" "C:\Program Files\SC Hoang Quoc\SC Hoang Quoc.exe"
     timeout /t 3 >nul
-    if exist "%LOCALAPPDATA%\Mobiphone\records.db" (
+    if exist "%LOCALAPPDATA%\SC Hoang Quoc\records.db" (
         echo Database đã được tạo!
     )
 )

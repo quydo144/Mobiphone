@@ -1,7 +1,7 @@
 <Project Sdk="WixToolset.Sdk/4.0.5">
   <PropertyGroup>
     <OutputType>Package</OutputType>
-    <OutputName>Mobiphone</OutputName>
+    <OutputName>SC Hoang Quoc</OutputName>
     <InstallerPlatform>x64</InstallerPlatform>
   </PropertyGroup>
 </Project>
