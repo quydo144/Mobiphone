@@ -3,7 +3,7 @@
   <Package Name="SC Hoang Quoc" 
            Manufacturer="SC Hoang Quoc" 
            Version="1.0.0.0"
-           UpgradeCode="12345678-1234-1234-1234-123456789012">
+           UpgradeCode="448B8468-32D0-4EF8-90AA-BF5DD8C1AA75">
     
     <MajorUpgrade DowngradeErrorMessage="Đã cài đặt phiên bản mới hơn của [ProductName]." />
     
