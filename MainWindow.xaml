@@ -60,7 +60,6 @@
                     <TextBlock Text="Loại sim:"
                                FontWeight="SemiBold"
                                Margin="0,0,0,8"/>
-
                     <WrapPanel Margin="0,0,0,15">
                         <CheckBox x:Name="chkFilterTuQuy"
                                   Content="Tứ quý"
