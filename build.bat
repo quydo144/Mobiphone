@@ -98,7 +98,7 @@ echo.
 echo [7/7] Building MSI installer...
 wix extension add WixToolset.Util.wixext 2>nul
 cd Installer
-wix build Package.wxs HarvestedFiles.wxs -arch x64 -d PublishDir=..\bin\Release\net8.0-windows\win-x64\publish -out ..\SC Hoang Quoc.msi
+wix build Package.wxs HarvestedFiles.wxs -arch x64 -d PublishDir="..\bin\Release\net8.0-windows\win-x64\publish" -o "..\SC Hoang Quoc.msi"
 set BUILD_RESULT=%errorlevel%
 cd ..
 
@@ -150,7 +150,7 @@ echo Registry cleaned
 echo.
 
 echo [3/3] Cài đặt phiên bản mới...
-msiexec /i "%CD%\MobiSC Hoang Quocphone.msi" /qb
+msiexec /i "%CD%\SC Hoang Quoc.msi" /qb
 echo Cài đặt hoàn tất!
 echo.
 
