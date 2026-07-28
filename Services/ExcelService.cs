@@ -2,6 +2,7 @@ using System.IO;
 using OfficeOpenXml;
 using Mobiphone.Models;
 using System.Text.RegularExpressions;
+using OfficeOpenXml.Style;
 
 namespace Mobiphone.Services
 {
@@ -215,6 +216,105 @@ namespace Mobiphone.Services
                 record.ABACAC = (sub6[0] == sub6[2] && sub6[2] == sub6[4]) && // Chữ số A
                                 (sub6[3] == sub6[5]) &&                      // Chữ số C
                                 (sub6[1] != sub6[3]);                        // B khác C
+            }
+        }
+
+        public void ExportToExcel(List<Record> records, string filePath)
+        {
+            if (records == null || records.Count == 0)
+            {
+                throw new ArgumentException("Danh sách dữ liệu xuất Excel không được để rỗng.", nameof(records));
+            }
+
+            var fileInfo = new FileInfo(filePath);
+
+            using (var package = new ExcelPackage(fileInfo))
+            {
+                var worksheet = package.Workbook.Worksheets.Add("Danh Sách Sim");
+                worksheet.Cells.Style.Font.Name = "Segoe UI";
+                worksheet.Cells.Style.Font.Size = 11;
+
+                string[] headers = new string[]
+                {
+                "STT", "Số Điện Thoại", "Tứ Quý", "Taxi 2", "Taxi 3", "Taxi 4", "Taxi 5",
+                "Taxi Dư 2", "Taxi Dư 3", "Đuôi Tiến", "Sảnh Giữa", "Tam Hoa",
+                "Soi Gương", "AXA_AYA", "AXA_BXB", "AXA_BYB", "ABABAC", "ABACAC"
+                };
+
+                for (int col = 0; col < headers.Length; col++)
+                {
+                    var cell = worksheet.Cells[1, col + 1];
+                    cell.Value = headers[col];
+
+                    // Style Header: Nền xanh dương, chữ trắng đậm, căn giữa
+                    cell.Style.Font.Bold = true;
+                    cell.Style.Font.Color.SetColor(Color.White);
+                    cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    cell.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(33, 150, 243)); // #2196F3
+                    cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    cell.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                }
+
+                // Đặt chiều cao cho dòng Header
+                worksheet.Row(1).Height = 28;
+
+                // 2. Điền dữ liệu (Data Rows)
+                int row = 2;
+                foreach (var record in records)
+                {
+                    worksheet.Cells[row, 1].Value = row - 1; // STT
+
+                    // Lưu ý: Đặt dạng Text để số điện thoại không bị mất số 0 ở đầu
+                    var phoneCell = worksheet.Cells[row, 2];
+                    phoneCell.Style.Numberformat.Format = "@";
+                    phoneCell.Value = record.Phone;
+
+                    // Các cột Boolean (Hiển thị "x" nếu True, để trống nếu False)
+                    worksheet.Cells[row, 3].Value = record.TuQuy ? "x" : "";
+                    worksheet.Cells[row, 4].Value = record.Taxi2 ? "x" : "";
+                    worksheet.Cells[row, 5].Value = record.Taxi3 ? "x" : "";
+                    worksheet.Cells[row, 6].Value = record.Taxi4 ? "x" : "";
+                    worksheet.Cells[row, 7].Value = record.Taxi5 ? "x" : "";
+                    worksheet.Cells[row, 8].Value = record.TaxiDu2 ? "x" : "";
+                    worksheet.Cells[row, 9].Value = record.TaxiDu3 ? "x" : "";
+                    worksheet.Cells[row, 10].Value = record.DuoiTien ? "x" : "";
+                    worksheet.Cells[row, 11].Value = record.SanhGiua ? "x" : "";
+                    worksheet.Cells[row, 12].Value = record.TamHoa ? "x" : "";
+                    worksheet.Cells[row, 13].Value = record.SoiGuong ? "x" : "";
+                    worksheet.Cells[row, 14].Value = record.AXA_AYA ? "x" : "";
+                    worksheet.Cells[row, 15].Value = record.AXA_BXB ? "x" : "";
+                    worksheet.Cells[row, 16].Value = record.AXA_BYB ? "x" : "";
+                    worksheet.Cells[row, 17].Value = record.ABABAC ? "x" : "";
+                    worksheet.Cells[row, 18].Value = record.ABACAC ? "x" : "";
+
+                    // Định dạng căn giữa cho tất cả các cột dữ liệu trừ cột SĐT (căn trái)
+                    for (int col = 1; col <= headers.Length; col++)
+                    {
+                        if (col != 2)
+                        {
+                            worksheet.Cells[row, col].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                        }
+                        worksheet.Cells[row, col].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                    }
+
+                    worksheet.Row(row).Height = 20;
+                    row++;
+                }
+
+                // 4. Tự động căn chỉnh độ rộng cột theo nội dung (AutoFit)
+                worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+
+                // Đảm bảo các cột boolean có độ rộng tối thiểu để đẹp mắt
+                for (int col = 3; col <= headers.Length; col++)
+                {
+                    if (worksheet.Column(col).Width < 12)
+                    {
+                        worksheet.Column(col).Width = 12;
+                    }
+                }
+
+                // 5. Lưu file
+                package.Save();
             }
         }
     }

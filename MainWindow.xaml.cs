@@ -1,9 +1,7 @@
 using System.IO;
 using System.Windows;
-using System.Linq;
 using Mobiphone.Services;
 using Mobiphone.Models;
-using System.Collections.Generic;
 using WinForms = System.Windows.Forms;
 using MessageBox = System.Windows.MessageBox;
 
@@ -43,7 +41,7 @@ namespace Mobiphone
             using (var openFileDialog = new WinForms.OpenFileDialog())
             {
                 openFileDialog.Filter = "Excel Files|*.xlsx;*.xls|All Files|*.*";
-                openFileDialog.Title = "Select an Excel file";
+                openFileDialog.Title = "Chọn file Excel";
 
                 if (openFileDialog.ShowDialog() == WinForms.DialogResult.OK)
                 {
@@ -53,7 +51,7 @@ namespace Mobiphone
                     txtFilePath.Text = _selectedFilePath;
 
                     btnImport.IsEnabled = true;
-                    txtStatus.Text = "File selected. Ready to import.";
+                    txtStatus.Text = "Đã chọn file. Sẵn sàng nhập dữ liệu.";
                     txtStatus.Foreground = System.Windows.Media.Brushes.Green;
                 }
             }
@@ -63,7 +61,7 @@ namespace Mobiphone
         {
             using (var folderDialog = new WinForms.FolderBrowserDialog())
             {
-                folderDialog.Description = "Select a folder containing Excel files";
+                folderDialog.Description = "Chọn thư mục chứa các file Excel";
                 folderDialog.ShowNewFolderButton = false;
 
                 if (folderDialog.ShowDialog() == WinForms.DialogResult.OK)
@@ -80,12 +78,12 @@ namespace Mobiphone
 
                     if (excelFiles.Length > 0)
                     {
-                        txtStatus.Text = $"Folder selected. Found {excelFiles.Length} Excel file(s). Ready to import.";
+                        txtStatus.Text = $"Đã chọn thư mục. Tìm thấy {excelFiles.Length} file Excel. Sẵn sàng nhập dữ liệu.";
                         txtStatus.Foreground = System.Windows.Media.Brushes.Green;
                     }
                     else
                     {
-                        txtStatus.Text = "No Excel files found in selected folder.";
+                        txtStatus.Text = "Không tìm thấy file Excel nào trong thư mục đã chọn.";
                         txtStatus.Foreground = System.Windows.Media.Brushes.Orange;
                     }
                 }
@@ -96,8 +94,8 @@ namespace Mobiphone
         {
             if (string.IsNullOrEmpty(_selectedFilePath) && string.IsNullOrEmpty(_selectedFolderPath))
             {
-                MessageBox.Show("Please select a file or folder first.", "Warning",
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Vui lòng chọn một file hoặc thư mục trước.", "Cảnh báo",
+                        MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -125,63 +123,63 @@ namespace Mobiphone
                 progressBar.Value = 0;
 
                 string fileName = Path.GetFileName(filePath);
-                txtStatus.Text = $"Processing: {fileName}...";
+                txtStatus.Text = $"Đang xử lý: {fileName}...";
                 txtStatus.Foreground = System.Windows.Media.Brushes.Orange;
 
                 // Read Excel file
                 progressBar.Value = 20;
-                txtProgress.Text = "Reading Excel file...";
+                txtProgress.Text = "Đang đọc file Excel...";
                 var records = await Task.Run(() => _excelService.ReadExcelFile(filePath));
 
                 if (records.Count == 0)
                 {
                     progressBar.Visibility = Visibility.Collapsed;
                     txtProgress.Visibility = Visibility.Collapsed;
-                    MessageBox.Show("No valid phone numbers found in the Excel file.\n\nPhone numbers must be exactly 9 digits.", "Information",
+                    MessageBox.Show("Không tìm thấy số điện thoại hợp lệ trong file Excel.\n\nSố điện thoại phải chính xác 9 chữ số.", "Thông tin",
                         MessageBoxButton.OK, MessageBoxImage.Information);
-                    txtStatus.Text = "No valid data to import.";
+                    txtStatus.Text = "Không có dữ liệu hợp lệ để nhập.";
                     return;
                 }
 
                 // Import to database
                 progressBar.Value = 50;
-                txtProgress.Text = $"Importing {records.Count} phone numbers to database...";
+                txtProgress.Text = $"Đang nhập {records.Count} số điện thoại vào cơ sở dữ liệu...";
                 var (importedCount, duplicateCount) = await Task.Run(() => _databaseService.ImportRecords(records));
 
                 // Reload data
                 progressBar.Value = 90;
-                txtProgress.Text = "Reloading data...";
+                txtProgress.Text = "Đang tải lại dữ liệu...";
                 LoadDataFromDatabase();
 
                 // Complete
                 progressBar.Value = 100;
-                txtProgress.Text = "Import completed!";
+                txtProgress.Text = "Nhập dữ liệu hoàn tất!";
                 await Task.Delay(500); // Show 100% briefly
 
                 progressBar.Visibility = Visibility.Collapsed;
                 txtProgress.Visibility = Visibility.Collapsed;
 
-                string statusMessage = $"Successfully imported {importedCount} phone numbers from {fileName}";
+                string statusMessage = $"Đã nhập thành công {importedCount} số điện thoại từ {fileName}";
                 if (duplicateCount > 0)
                 {
-                    statusMessage += $" ({duplicateCount} duplicates skipped)";
+                    statusMessage += $" ({duplicateCount} bản sao đã bị bỏ qua)";
                 }
                 txtStatus.Text = statusMessage;
                 txtStatus.Foreground = System.Windows.Media.Brushes.Green;
 
-                string messageDetails = $"Import completed successfully!\n\n" +
+                string messageDetails = $"Nhập dữ liệu thành công!\n\n" +
                     $"File: {fileName}\n" +
-                    $"Total phone numbers in file: {records.Count}\n" +
-                    $"Successfully imported: {importedCount}\n";
+                    $"Tổng số điện thoại trong file: {records.Count}\n" +
+                    $"Đã nhập thành công: {importedCount}\n";
 
                 if (duplicateCount > 0)
                 {
-                    messageDetails += $"Duplicates skipped: {duplicateCount}";
+                    messageDetails += $"Bản sao đã bị bỏ qua: {duplicateCount}";
                 }
 
                 MessageBox.Show(
                     messageDetails,
-                    "Import Complete",
+                    "Nhập Dữ Liệu Hoàn Tất",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
             }
@@ -189,9 +187,9 @@ namespace Mobiphone
             {
                 progressBar.Visibility = Visibility.Collapsed;
                 txtProgress.Visibility = Visibility.Collapsed;
-                txtStatus.Text = "Import failed!";
+                txtStatus.Text = "Nhập dữ liệu thất bại!";
                 txtStatus.Foreground = System.Windows.Media.Brushes.Red;
-                MessageBox.Show($"Error importing data: {ex.Message}", "Error",
+                MessageBox.Show($"Lỗi khi nhập dữ liệu: {ex.Message}", "Lỗi",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
@@ -216,7 +214,7 @@ namespace Mobiphone
 
                 if (excelFiles.Length == 0)
                 {
-                    MessageBox.Show("No Excel files found in the selected folder.", "Information",
+                    MessageBox.Show("Không tìm thấy file Excel nào trong thư mục đã chọn.", "Thông tin",
                         MessageBoxButton.OK, MessageBoxImage.Information);
                     return;
                 }
@@ -233,7 +231,7 @@ namespace Mobiphone
                 int filesWithErrors = 0;
                 var errorFiles = new List<string>();
 
-                txtStatus.Text = $"Processing {excelFiles.Length} Excel files...";
+                txtStatus.Text = $"Đang xử lý {excelFiles.Length} file Excel...";
                 txtStatus.Foreground = System.Windows.Media.Brushes.Orange;
 
                 foreach (var filePath in excelFiles)
@@ -245,7 +243,7 @@ namespace Mobiphone
 
                         // Update progress
                         progressBar.Value = (filesProcessed * 100.0 / excelFiles.Length);
-                        txtProgress.Text = $"Processing file {filesProcessed}/{excelFiles.Length}: {fileName}";
+                        txtProgress.Text = $"Đang xử lý file {filesProcessed}/{excelFiles.Length}: {fileName}";
 
                         // Read Excel file
                         var records = await Task.Run(() => _excelService.ReadExcelFile(filePath));
@@ -267,7 +265,7 @@ namespace Mobiphone
                 }
 
                 // Reload data
-                txtProgress.Text = "Reloading data...";
+                txtProgress.Text = "Đang tải lại dữ liệu...";
                 LoadDataFromDatabase();
 
                 // Complete
@@ -277,19 +275,19 @@ namespace Mobiphone
                 progressBar.Visibility = Visibility.Collapsed;
                 txtProgress.Visibility = Visibility.Collapsed;
 
-                string statusMessage = $"Folder import completed! Imported {totalImported} phone numbers from {filesProcessed} files";
+                string statusMessage = $"Nhập thư mục hoàn tất! Đã nhập {totalImported} số điện thoại từ {filesProcessed} file";
                 if (totalDuplicates > 0)
                 {
-                    statusMessage += $" ({totalDuplicates} duplicates)";
+                    statusMessage += $" ({totalDuplicates} bản sao đã bị bỏ qua)";
                 }
                 txtStatus.Text = statusMessage;
                 txtStatus.Foreground = System.Windows.Media.Brushes.Green;
 
-                string messageDetails = $"Folder import completed!\n\n" +
-                    $"Files processed: {filesProcessed}\n" +
-                    $"Total phone numbers read: {totalRecordsRead}\n" +
-                    $"Successfully imported: {totalImported}\n" +
-                    $"Duplicates skipped: {totalDuplicates}\n";
+                string messageDetails = $"Nhập thư mục hoàn tất!\n\n" +
+                    $"Files đã xử lý: {filesProcessed}\n" +
+                    $"Tổng số điện thoại đọc được: {totalRecordsRead}\n" +
+                    $"Đã nhập thành công: {totalImported}\n" +
+                    $"Bản sao đã bỏ qua: {totalDuplicates}\n";
 
                 if (filesWithErrors > 0)
                 {
@@ -303,7 +301,7 @@ namespace Mobiphone
 
                 MessageBox.Show(
                     messageDetails,
-                    "Folder Import Complete",
+                    "Nhập Thư Mục Hoàn Tất",
                     MessageBoxButton.OK,
                     filesWithErrors > 0 ? MessageBoxImage.Warning : MessageBoxImage.Information);
             }
@@ -311,9 +309,9 @@ namespace Mobiphone
             {
                 progressBar.Visibility = Visibility.Collapsed;
                 txtProgress.Visibility = Visibility.Collapsed;
-                txtStatus.Text = "Folder import failed!";
+                txtStatus.Text = "Nhập thư mục thất bại!";
                 txtStatus.Foreground = System.Windows.Media.Brushes.Red;
-                MessageBox.Show($"Error importing folder: {ex.Message}", "Error",
+                MessageBox.Show($"Lỗi khi nhập thư mục: {ex.Message}", "Lỗi",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
@@ -353,7 +351,7 @@ namespace Mobiphone
 
                 // Update UI
                 txtRecordCount.Text = _totalRecords.ToString();
-                txtPageInfo.Text = $"Page {_currentPage} of {_totalPages}";
+                txtPageInfo.Text = $"Trang {_currentPage} của {_totalPages}";
 
                 // Update button states
                 btnFirstPage.IsEnabled = _currentPage > 1;
@@ -363,7 +361,7 @@ namespace Mobiphone
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading data: {ex.Message}", "Error",
+                MessageBox.Show($"Lỗi khi tải dữ liệu: {ex.Message}", "Lỗi",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -441,12 +439,12 @@ namespace Mobiphone
                 // Load data with filters
                 LoadDataFromDatabase(filterOptions);
 
-                txtFilterStatus.Text = $"Filter applied. Found {_filteredRecords} records.";
+                txtFilterStatus.Text = $"Bộ lọc đã được áp dụng. Tìm thấy {_filteredRecords} bản ghi.";
                 txtFilterStatus.Foreground = System.Windows.Media.Brushes.Blue;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error applying filter: {ex.Message}", "Error",
+                MessageBox.Show($"Lỗi khi áp dụng bộ lọc: {ex.Message}", "Lỗi",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -481,12 +479,12 @@ namespace Mobiphone
                 // Load all data without filters
                 LoadDataFromDatabase(new RecordFilterOptions());
 
-                txtFilterStatus.Text = $"Filter cleared. Showing all {_totalRecords} records.";
+                txtFilterStatus.Text = $"Bộ lọc đã được xóa. Đang hiển thị tất cả {_totalRecords} bản ghi.";
                 txtFilterStatus.Foreground = System.Windows.Media.Brushes.Green;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error clearing filter: {ex.Message}", "Error",
+                MessageBox.Show($"Lỗi khi xóa bộ lọc: {ex.Message}", "Lỗi",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -509,15 +507,123 @@ namespace Mobiphone
                 try
                 {
                     System.Windows.Clipboard.SetText(selectedRecord.Phone);
-                    txtFilterStatus.Text = $"Copied: {selectedRecord.Phone}";
+                    txtFilterStatus.Text = $"Đã sao chép: {selectedRecord.Phone}";
                     txtFilterStatus.Foreground = System.Windows.Media.Brushes.Green;
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error copying to clipboard: {ex.Message}", "Error",
+                    MessageBox.Show($"Lỗi khi sao chép vào clipboard: {ex.Message}", "Lỗi",
                         MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
+        }
+
+        private async void BtnExport_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var filterOptions = new RecordFilterOptions
+                {
+                    PhoneFilter = string.IsNullOrWhiteSpace(txtFilterPhone.Text) ? "" : txtFilterPhone.Text.Trim(),
+                    FilterTuQuy = chkFilterTuQuy.IsChecked == true,
+                    FilterTaxi2 = chkFilterTaxi2.IsChecked == true,
+                    FilterTaxi3 = chkFilterTaxi3.IsChecked == true,
+                    FilterTaxi4 = chkFilterTaxi4.IsChecked == true,
+                    FilterTaxi5 = chkFilterTaxi5.IsChecked == true,
+                    FilterTaxiDu2 = chkFilterTaxiDu2.IsChecked == true,
+                    FilterTaxiDu3 = chkFilterTaxiDu3.IsChecked == true,
+                    FilterDuoiTien = chkFilterDuoiTien.IsChecked == true,
+                    FilterSanhGiua = chkFilterSanhGiua.IsChecked == true,
+                    FilterTamHoa = chkFilterTamHoa.IsChecked == true,
+                    FilterSoiGuong = chkFilterSoiGuong.IsChecked == true,
+                    FilterAXA_AYA = chkFilterAXA_AYA.IsChecked == true,
+                    FilterAXA_BXB = chkFilterAXA_BXB.IsChecked == true,
+                    FilterAXA_BYB = chkFilterAXA_BYB.IsChecked == true,
+                    FilterABABAC = chkFilterABABAC.IsChecked == true,
+                    FilterABACAC = chkFilterABACAC.IsChecked == true
+                };
+
+                _currentFilter = filterOptions;
+                var recordsToExport = _databaseService.GetAllFilteredRecords(filterOptions);
+
+                if (recordsToExport == null || recordsToExport.Count == 0)
+                {
+                    MessageBox.Show("Không có bản ghi nào để xuất dựa trên bộ lọc hiện tại.", "Thông báo",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
+                var saveFileDialog = new Microsoft.Win32.SaveFileDialog
+                {
+                    Filter = "Excel Files (*.xlsx)|*.xlsx",
+                    Title = "Lưu dữ liệu xuất Excel",
+                    FileName = GenerateExportFileName(filterOptions)
+                };
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    string exportPath = saveFileDialog.FileName;
+
+                    await Task.Run(() => _excelService.ExportToExcel(recordsToExport, exportPath));
+
+                    MessageBox.Show($"Xuất dữ liệu thành công ra file:\n{exportPath}", "Hoàn tất",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi xuất dữ liệu: {ex.Message}", "Lỗi",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private string GenerateExportFileName(RecordFilterOptions filter)
+        {
+            var activeFilters = new List<string>();
+            if (!string.IsNullOrWhiteSpace(filter.PhoneFilter))
+            {
+                activeFilters.Add($"Phone_{filter.PhoneFilter.Trim()}");
+            }
+            if (filter.FilterTuQuy) activeFilters.Add("TuQuy");
+            if (filter.FilterTaxi2) activeFilters.Add("Taxi2");
+            if (filter.FilterTaxi3) activeFilters.Add("Taxi3");
+            if (filter.FilterTaxi4) activeFilters.Add("Taxi4");
+            if (filter.FilterTaxi5) activeFilters.Add("Taxi5");
+            if (filter.FilterTaxiDu2) activeFilters.Add("TaxiDu2");
+            if (filter.FilterTaxiDu3) activeFilters.Add("TaxiDu3");
+            if (filter.FilterDuoiTien) activeFilters.Add("DuoiTien");
+            if (filter.FilterSanhGiua) activeFilters.Add("SanhGiua");
+            if (filter.FilterTamHoa) activeFilters.Add("TamHoa");
+            if (filter.FilterSoiGuong) activeFilters.Add("SoiGuong");
+            if (filter.FilterAXA_AYA) activeFilters.Add("AXA_AYA");
+            if (filter.FilterAXA_BXB) activeFilters.Add("AXA_BXB");
+            if (filter.FilterAXA_BYB) activeFilters.Add("AXA_BYB");
+            if (filter.FilterABABAC) activeFilters.Add("ABABAC");
+            if (filter.FilterABACAC) activeFilters.Add("ABACAC");
+            string filterSuffix = "";
+            if (activeFilters.Count > 0)
+            {
+                if (activeFilters.Count <= 3)
+                {
+                    filterSuffix = "_" + string.Join("_", activeFilters);
+                }
+                else
+                {
+                    filterSuffix = $"_{activeFilters.Count}DieuKien";
+                }
+            }
+            else
+            {
+                filterSuffix = "_TatCa";
+            }
+
+            string rawFileName = $"Xuat_Sim{filterSuffix}_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
+            foreach (char c in System.IO.Path.GetInvalidFileNameChars())
+            {
+                rawFileName = rawFileName.Replace(c, '_');
+            }
+
+            return rawFileName;
         }
     }
 }

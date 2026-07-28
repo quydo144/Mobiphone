@@ -271,6 +271,108 @@ namespace Mobiphone.Services
             return records;
         }
 
+        public List<Record> GetAllFilteredRecords(RecordFilterOptions filterOptions)
+        {
+            var records = new List<Record>();
+
+            try
+            {
+                using (var connection = new SQLiteConnection(_connectionString))
+                {
+                    connection.Open();
+
+                    // Build WHERE clause
+                    var typeConditions = new List<string>();
+
+                    if (filterOptions.FilterTuQuy) typeConditions.Add("TuQuy = 1");
+                    if (filterOptions.FilterTaxi2) typeConditions.Add("Taxi2 = 1");
+                    if (filterOptions.FilterTaxi3) typeConditions.Add("Taxi3 = 1");
+                    if (filterOptions.FilterTaxi4) typeConditions.Add("Taxi4 = 1");
+                    if (filterOptions.FilterTaxi5) typeConditions.Add("Taxi5 = 1");
+                    if (filterOptions.FilterTaxiDu2) typeConditions.Add("TaxiDu2 = 1");
+                    if (filterOptions.FilterTaxiDu3) typeConditions.Add("TaxiDu3 = 1");
+                    if (filterOptions.FilterDuoiTien) typeConditions.Add("DuoiTien = 1");
+                    if (filterOptions.FilterSanhGiua) typeConditions.Add("SanhGiua = 1");
+                    if (filterOptions.FilterTamHoa) typeConditions.Add("TamHoa = 1");
+                    if (filterOptions.FilterSoiGuong) typeConditions.Add("SoiGuong = 1");
+                    if (filterOptions.FilterAXA_AYA) typeConditions.Add("AXA_AYA = 1");
+                    if (filterOptions.FilterAXA_BXB) typeConditions.Add("AXA_BXB = 1");
+                    if (filterOptions.FilterAXA_BYB) typeConditions.Add("AXA_BYB = 1");
+                    if (filterOptions.FilterABABAC) typeConditions.Add("ABABAC = 1");
+                    if (filterOptions.FilterABACAC) typeConditions.Add("ABACAC = 1");
+
+                    var allConditions = new List<string>();
+
+                    // Lọc theo chuỗi Phone
+                    if (!string.IsNullOrWhiteSpace(filterOptions.PhoneFilter))
+                    {
+                        allConditions.Add("Phone LIKE @PhoneFilter");
+                    }
+
+                    // Gộp các điều kiện loại sim theo OR
+                    if (typeConditions.Count > 0)
+                    {
+                        allConditions.Add("(" + string.Join(" OR ", typeConditions) + ")");
+                    }
+
+                    string whereClause = allConditions.Count > 0 ? "WHERE " + string.Join(" AND ", allConditions) : "";
+
+                    string selectQuery = $@"
+                        SELECT 
+                            Id, Phone, TuQuy, Taxi2, Taxi3, Taxi4, Taxi5, 
+                            TaxiDu2, TaxiDu3, DuoiTien, SanhGiua, TamHoa, 
+                            SoiGuong, AXA_AYA, AXA_BXB, AXA_BYB, ABABAC, ABACAC
+                        FROM Records 
+                        {whereClause}
+                        ORDER BY Id DESC";
+
+                    using (var command = new SQLiteCommand(selectQuery, connection))
+                    {
+                        if (!string.IsNullOrWhiteSpace(filterOptions.PhoneFilter))
+                        {
+                            string searchPattern = "%" + filterOptions.PhoneFilter.Replace('?', '_') + "%";
+                            command.Parameters.AddWithValue("@PhoneFilter", searchPattern);
+                        }
+
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var record = new Record
+                                {
+                                    Id = reader.GetInt32(0),
+                                    Phone = reader.GetString(1),
+                                    TuQuy = reader.GetInt32(2) == 1,
+                                    Taxi2 = reader.GetInt32(3) == 1,
+                                    Taxi3 = reader.GetInt32(4) == 1,
+                                    Taxi4 = reader.GetInt32(5) == 1,
+                                    Taxi5 = reader.GetInt32(6) == 1,
+                                    TaxiDu2 = reader.GetInt32(7) == 1,
+                                    TaxiDu3 = reader.GetInt32(8) == 1,
+                                    DuoiTien = reader.GetInt32(9) == 1,
+                                    SanhGiua = reader.GetInt32(10) == 1,
+                                    TamHoa = reader.GetInt32(11) == 1,
+                                    SoiGuong = reader.GetInt32(12) == 1,
+                                    AXA_AYA = reader.GetInt32(13) == 1,
+                                    AXA_BXB = reader.GetInt32(14) == 1,
+                                    AXA_BYB = reader.GetInt32(15) == 1,
+                                    ABABAC = reader.GetInt32(16) == 1,
+                                    ABACAC = reader.GetInt32(17) == 1
+                                };
+                                records.Add(record);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving records from database: {ex.Message}", ex);
+            }
+
+            return records;
+        }
+
         public int GetRecordCount(RecordFilterOptions filterOptions)
         {
             try
