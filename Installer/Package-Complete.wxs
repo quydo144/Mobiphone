@@ -12,7 +12,7 @@
     <MajorUpgrade DowngradeErrorMessage="Đã cài đặt phiên bản mới hơn của [ProductName]." />
     
     <MediaTemplate EmbedCab="yes" />
-    
+    <Property Id="ARPPRODUCTICON" Value="AppIcon" />
     <Feature Id="ProductFeature" Title="Mobiphone Application" Level="1">
       <ComponentRef Id="MainExecutable" />
       <ComponentRef Id="ApplicationShortcutStartMenu" />
@@ -122,6 +122,6 @@
   </Fragment>
 
   <Fragment>
-    <Icon Id="AppIcon" SourceFile="..\bin\Release\net8.0-windows\win-x64\publish\Mobiphone.exe" />
+    <Icon Id="AppIcon" SourceFile="..\icon.ico" />
   </Fragment>
 </Wix>

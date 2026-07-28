@@ -41,12 +41,22 @@ namespace Mobiphone.Services
                         CREATE TABLE IF NOT EXISTS Records (
                             Id INTEGER PRIMARY KEY AUTOINCREMENT,
                             Phone TEXT NOT NULL UNIQUE,
-                            MiniThanTai INTEGER NOT NULL DEFAULT 0,
-                            BigThanTai INTEGER NOT NULL DEFAULT 0,
-                            LocPhat INTEGER NOT NULL DEFAULT 0,
                             TuQuy INTEGER NOT NULL DEFAULT 0,
-                            TuQuyGiua INTEGER NOT NULL DEFAULT 0,
-                            TamHoaKep INTEGER NOT NULL DEFAULT 0
+                            Taxi2 INTEGER NOT NULL DEFAULT 0,
+                            Taxi3 INTEGER NOT NULL DEFAULT 0,
+                            Taxi4 INTEGER NOT NULL DEFAULT 0,
+                            Taxi5 INTEGER NOT NULL DEFAULT 0,
+                            TaxiDu2 INTEGER NOT NULL DEFAULT 0,
+                            TaxiDu3 INTEGER NOT NULL DEFAULT 0,
+                            DuoiTien INTEGER NOT NULL DEFAULT 0,
+                            SanhGiua INTEGER NOT NULL DEFAULT 0,
+                            TamHoa INTEGER NOT NULL DEFAULT 0,
+                            SoiGuong INTEGER NOT NULL DEFAULT 0,
+                            AXA_AYA INTEGER NOT NULL DEFAULT 0,
+                            AXA_BXB INTEGER NOT NULL DEFAULT 0,
+                            AXA_BYB INTEGER NOT NULL DEFAULT 0,
+                            ABABAC INTEGER NOT NULL DEFAULT 0,
+                            ABACAC INTEGER NOT NULL DEFAULT 0
                         )";
 
                     using (var command = new SQLiteCommand(createTableQuery, connection))
@@ -85,22 +95,41 @@ namespace Mobiphone.Services
                     {
                         try
                         {
-                            // Use INSERT OR IGNORE to skip duplicates
-                            string insertQuery = @"
-                                INSERT OR IGNORE INTO Records (Phone, MiniThanTai, BigThanTai, LocPhat, TuQuy, TuQuyGiua, TamHoaKep)
-                                VALUES (@Phone, @MiniThanTai, @BigThanTai, @LocPhat, @TuQuy, @TuQuyGiua, @TamHoaKep)";
+                            // Query INSERT đã cập nhật theo 16 trường mới
+                            string insertQuery = @"INSERT OR IGNORE INTO Records (
+                                    Phone, TuQuy, Taxi2, Taxi3, Taxi4, Taxi5, 
+                                    TaxiDu2, TaxiDu3, DuoiTien, SanhGiua, TamHoa, 
+                                    SoiGuong, AXA_AYA, AXA_BXB, AXA_BYB, ABABAC, ABACAC
+                                ) VALUES (
+                                    @Phone, @TuQuy, @Taxi2, @Taxi3, @Taxi4, @Taxi5, 
+                                    @TaxiDu2, @TaxiDu3, @DuoiTien, @SanhGiua, @TamHoa, 
+                                    @SoiGuong, @AXA_AYA, @AXA_BXB, @AXA_BYB, @ABABAC, @ABACAC
+                                )";
 
-                            foreach (var record in records)
+                            // Khởi tạo command một lần ngoài vòng lặp để tối ưu bộ nhớ & tốc độ
+                            using (var command = new SQLiteCommand(insertQuery, connection))
                             {
-                                using (var command = new SQLiteCommand(insertQuery, connection))
+                                foreach (var record in records)
                                 {
-                                    command.Parameters.AddWithValue("@Phone", record.Phone);
-                                    command.Parameters.AddWithValue("@MiniThanTai", record.MiniThanTai ? 1 : 0);
-                                    command.Parameters.AddWithValue("@BigThanTai", record.BigThanTai ? 1 : 0);
-                                    command.Parameters.AddWithValue("@LocPhat", record.LocPhat ? 1 : 0);
+                                    command.Parameters.Clear();
+
+                                    command.Parameters.AddWithValue("@Phone", record.Phone ?? string.Empty);
                                     command.Parameters.AddWithValue("@TuQuy", record.TuQuy ? 1 : 0);
-                                    command.Parameters.AddWithValue("@TuQuyGiua", record.TuQuyGiua ? 1 : 0);
-                                    command.Parameters.AddWithValue("@TamHoaKep", record.TamHoaKep ? 1 : 0);
+                                    command.Parameters.AddWithValue("@Taxi2", record.Taxi2 ? 1 : 0);
+                                    command.Parameters.AddWithValue("@Taxi3", record.Taxi3 ? 1 : 0);
+                                    command.Parameters.AddWithValue("@Taxi4", record.Taxi4 ? 1 : 0);
+                                    command.Parameters.AddWithValue("@Taxi5", record.Taxi5 ? 1 : 0);
+                                    command.Parameters.AddWithValue("@TaxiDu2", record.TaxiDu2 ? 1 : 0);
+                                    command.Parameters.AddWithValue("@TaxiDu3", record.TaxiDu3 ? 1 : 0);
+                                    command.Parameters.AddWithValue("@DuoiTien", record.DuoiTien ? 1 : 0);
+                                    command.Parameters.AddWithValue("@SanhGiua", record.SanhGiua ? 1 : 0);
+                                    command.Parameters.AddWithValue("@TamHoa", record.TamHoa ? 1 : 0);
+                                    command.Parameters.AddWithValue("@SoiGuong", record.SoiGuong ? 1 : 0);
+                                    command.Parameters.AddWithValue("@AXA_AYA", record.AXA_AYA ? 1 : 0);
+                                    command.Parameters.AddWithValue("@AXA_BXB", record.AXA_BXB ? 1 : 0);
+                                    command.Parameters.AddWithValue("@AXA_BYB", record.AXA_BYB ? 1 : 0);
+                                    command.Parameters.AddWithValue("@ABABAC", record.ABABAC ? 1 : 0);
+                                    command.Parameters.AddWithValue("@ABACAC", record.ABACAC ? 1 : 0);
 
                                     int rowsAffected = command.ExecuteNonQuery();
 
@@ -147,26 +176,46 @@ namespace Mobiphone.Services
                     int offset = (pageNumber - 1) * pageSize;
 
                     // Build WHERE clause
-                    var whereConditions = new List<string>();
+                    var typeConditions = new List<string>();
 
+                    if (filterOptions.FilterTuQuy) typeConditions.Add("TuQuy = 1");
+                    if (filterOptions.FilterTaxi2) typeConditions.Add("Taxi2 = 1");
+                    if (filterOptions.FilterTaxi3) typeConditions.Add("Taxi3 = 1");
+                    if (filterOptions.FilterTaxi4) typeConditions.Add("Taxi4 = 1");
+                    if (filterOptions.FilterTaxi5) typeConditions.Add("Taxi5 = 1");
+                    if (filterOptions.FilterTaxiDu2) typeConditions.Add("TaxiDu2 = 1");
+                    if (filterOptions.FilterTaxiDu3) typeConditions.Add("TaxiDu3 = 1");
+                    if (filterOptions.FilterDuoiTien) typeConditions.Add("DuoiTien = 1");
+                    if (filterOptions.FilterSanhGiua) typeConditions.Add("SanhGiua = 1");
+                    if (filterOptions.FilterTamHoa) typeConditions.Add("TamHoa = 1");
+                    if (filterOptions.FilterSoiGuong) typeConditions.Add("SoiGuong = 1");
+                    if (filterOptions.FilterAXA_AYA) typeConditions.Add("AXA_AYA = 1");
+                    if (filterOptions.FilterAXA_BXB) typeConditions.Add("AXA_BXB = 1");
+                    if (filterOptions.FilterAXA_BYB) typeConditions.Add("AXA_BYB = 1");
+                    if (filterOptions.FilterABABAC) typeConditions.Add("ABABAC = 1");
+                    if (filterOptions.FilterABACAC) typeConditions.Add("ABACAC = 1");
+
+                    var allConditions = new List<string>();
+
+                    // Lọc theo chuỗi Phone
                     if (!string.IsNullOrWhiteSpace(filterOptions.PhoneFilter))
                     {
-                        whereConditions.Add("Phone LIKE @PhoneFilter");
+                        allConditions.Add("Phone LIKE @PhoneFilter");
                     }
 
-                    if (filterOptions.FilterMiniThanTai) whereConditions.Add("MiniThanTai = 1");
-                    if (filterOptions.FilterBigThanTai) whereConditions.Add("BigThanTai = 1");
-                    if (filterOptions.FilterLocPhat) whereConditions.Add("LocPhat = 1");
-                    if (filterOptions.FilterTuQuy) whereConditions.Add("TuQuy = 1");
-                    if (filterOptions.FilterTuQuyGiua) whereConditions.Add("TuQuyGiua = 1");
-                    if (filterOptions.FilterTamHoaKep) whereConditions.Add("TamHoaKep = 1");
+                    // Gộp các điều kiện loại sim theo OR
+                    if (typeConditions.Count > 0)
+                    {
+                        allConditions.Add("(" + string.Join(" OR ", typeConditions) + ")");
+                    }
 
-                    string whereClause = whereConditions.Count > 0
-                        ? "WHERE " + string.Join(" OR ", whereConditions)
-                        : "";
+                    string whereClause = allConditions.Count > 0 ? "WHERE " + string.Join(" AND ", allConditions) : "";
 
                     string selectQuery = $@"
-                        SELECT Id, Phone, MiniThanTai, BigThanTai, LocPhat, TuQuy, TuQuyGiua, TamHoaKep 
+                        SELECT 
+                            Id, Phone, TuQuy, Taxi2, Taxi3, Taxi4, Taxi5, 
+                            TaxiDu2, TaxiDu3, DuoiTien, SanhGiua, TamHoa, 
+                            SoiGuong, AXA_AYA, AXA_BXB, AXA_BYB, ABABAC, ABACAC
                         FROM Records 
                         {whereClause}
                         ORDER BY Id DESC 
@@ -176,7 +225,8 @@ namespace Mobiphone.Services
                     {
                         if (!string.IsNullOrWhiteSpace(filterOptions.PhoneFilter))
                         {
-                            command.Parameters.AddWithValue("@PhoneFilter", "%" + filterOptions.PhoneFilter + "%");
+                            string searchPattern = "%" + filterOptions.PhoneFilter.Replace('?', '_') + "%";
+                            command.Parameters.AddWithValue("@PhoneFilter", searchPattern);
                         }
 
                         command.Parameters.AddWithValue("@PageSize", pageSize);
@@ -190,12 +240,22 @@ namespace Mobiphone.Services
                                 {
                                     Id = reader.GetInt32(0),
                                     Phone = reader.GetString(1),
-                                    MiniThanTai = reader.GetInt32(2) == 1,
-                                    BigThanTai = reader.GetInt32(3) == 1,
-                                    LocPhat = reader.GetInt32(4) == 1,
-                                    TuQuy = reader.GetInt32(5) == 1,
-                                    TuQuyGiua = reader.GetInt32(6) == 1,
-                                    TamHoaKep = reader.GetInt32(7) == 1
+                                    TuQuy = reader.GetInt32(2) == 1,
+                                    Taxi2 = reader.GetInt32(3) == 1,
+                                    Taxi3 = reader.GetInt32(4) == 1,
+                                    Taxi4 = reader.GetInt32(5) == 1,
+                                    Taxi5 = reader.GetInt32(6) == 1,
+                                    TaxiDu2 = reader.GetInt32(7) == 1,
+                                    TaxiDu3 = reader.GetInt32(8) == 1,
+                                    DuoiTien = reader.GetInt32(9) == 1,
+                                    SanhGiua = reader.GetInt32(10) == 1,
+                                    TamHoa = reader.GetInt32(11) == 1,
+                                    SoiGuong = reader.GetInt32(12) == 1,
+                                    AXA_AYA = reader.GetInt32(13) == 1,
+                                    AXA_BXB = reader.GetInt32(14) == 1,
+                                    AXA_BYB = reader.GetInt32(15) == 1,
+                                    ABABAC = reader.GetInt32(16) == 1,
+                                    ABACAC = reader.GetInt32(17) == 1
                                 };
                                 records.Add(record);
                             }
@@ -219,24 +279,38 @@ namespace Mobiphone.Services
                 {
                     connection.Open();
 
-                    // Build WHERE clause
-                    var whereConditions = new List<string>();
+                    var typeConditions = new List<string>();
+
+                    if (filterOptions.FilterTuQuy) typeConditions.Add("TuQuy = 1");
+                    if (filterOptions.FilterTaxi2) typeConditions.Add("Taxi2 = 1");
+                    if (filterOptions.FilterTaxi3) typeConditions.Add("Taxi3 = 1");
+                    if (filterOptions.FilterTaxi4) typeConditions.Add("Taxi4 = 1");
+                    if (filterOptions.FilterTaxi5) typeConditions.Add("Taxi5 = 1");
+                    if (filterOptions.FilterTaxiDu2) typeConditions.Add("TaxiDu2 = 1");
+                    if (filterOptions.FilterTaxiDu3) typeConditions.Add("TaxiDu3 = 1");
+                    if (filterOptions.FilterDuoiTien) typeConditions.Add("DuoiTien = 1");
+                    if (filterOptions.FilterSanhGiua) typeConditions.Add("SanhGiua = 1");
+                    if (filterOptions.FilterTamHoa) typeConditions.Add("TamHoa = 1");
+                    if (filterOptions.FilterSoiGuong) typeConditions.Add("SoiGuong = 1");
+                    if (filterOptions.FilterAXA_AYA) typeConditions.Add("AXA_AYA = 1");
+                    if (filterOptions.FilterAXA_BXB) typeConditions.Add("AXA_BXB = 1");
+                    if (filterOptions.FilterAXA_BYB) typeConditions.Add("AXA_BYB = 1");
+                    if (filterOptions.FilterABABAC) typeConditions.Add("ABABAC = 1");
+                    if (filterOptions.FilterABACAC) typeConditions.Add("ABACAC = 1");
+
+                    var allConditions = new List<string>();
 
                     if (!string.IsNullOrWhiteSpace(filterOptions.PhoneFilter))
                     {
-                        whereConditions.Add("Phone LIKE @PhoneFilter");
+                        allConditions.Add("Phone LIKE @PhoneFilter");
                     }
 
-                    if (filterOptions.FilterMiniThanTai) whereConditions.Add("MiniThanTai = 1");
-                    if (filterOptions.FilterBigThanTai) whereConditions.Add("BigThanTai = 1");
-                    if (filterOptions.FilterLocPhat) whereConditions.Add("LocPhat = 1");
-                    if (filterOptions.FilterTuQuy) whereConditions.Add("TuQuy = 1");
-                    if (filterOptions.FilterTuQuyGiua) whereConditions.Add("TuQuyGiua = 1");
-                    if (filterOptions.FilterTamHoaKep) whereConditions.Add("TamHoaKep = 1");
+                    if (typeConditions.Count > 0)
+                    {
+                        allConditions.Add("(" + string.Join(" OR ", typeConditions) + ")");
+                    }
 
-                    string whereClause = whereConditions.Count > 0
-                        ? "WHERE " + string.Join(" OR ", whereConditions)
-                        : "";
+                    string whereClause = allConditions.Count > 0 ? "WHERE " + string.Join(" AND ", allConditions) : "";
 
                     string countQuery = $"SELECT COUNT(*) FROM Records {whereClause}";
 
@@ -244,9 +318,9 @@ namespace Mobiphone.Services
                     {
                         if (!string.IsNullOrWhiteSpace(filterOptions.PhoneFilter))
                         {
-                            command.Parameters.AddWithValue("@PhoneFilter", "%" + filterOptions.PhoneFilter + "%");
+                            string searchPattern = "%" + filterOptions.PhoneFilter.Replace('?', '_') + "%";
+                            command.Parameters.AddWithValue("@PhoneFilter", searchPattern);
                         }
-
                         return Convert.ToInt32(command.ExecuteScalar());
                     }
                 }

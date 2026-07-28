@@ -417,12 +417,22 @@ namespace Mobiphone
                 var filterOptions = new RecordFilterOptions
                 {
                     PhoneFilter = string.IsNullOrWhiteSpace(txtFilterPhone.Text) ? "" : txtFilterPhone.Text.Trim(),
-                    FilterMiniThanTai = chkFilterMiniThanTai.IsChecked == true,
-                    FilterBigThanTai = chkFilterBigThanTai.IsChecked == true,
-                    FilterLocPhat = chkFilterLocPhat.IsChecked == true,
                     FilterTuQuy = chkFilterTuQuy.IsChecked == true,
-                    FilterTuQuyGiua = chkFilterTuQuyGiua.IsChecked == true,
-                    FilterTamHoaKep = chkFilterTamHoaKep.IsChecked == true
+                    FilterTaxi2 = chkFilterTaxi2.IsChecked == true,
+                    FilterTaxi3 = chkFilterTaxi3.IsChecked == true,
+                    FilterTaxi4 = chkFilterTaxi4.IsChecked == true,
+                    FilterTaxi5 = chkFilterTaxi5.IsChecked == true,
+                    FilterTaxiDu2 = chkFilterTaxiDu2.IsChecked == true,
+                    FilterTaxiDu3 = chkFilterTaxiDu3.IsChecked == true,
+                    FilterDuoiTien = chkFilterDuoiTien.IsChecked == true,
+                    FilterSanhGiua = chkFilterSanhGiua.IsChecked == true,
+                    FilterTamHoa = chkFilterTamHoa.IsChecked == true,
+                    FilterSoiGuong = chkFilterSoiGuong.IsChecked == true,
+                    FilterAXA_AYA = chkFilterAXA_AYA.IsChecked == true,
+                    FilterAXA_BXB = chkFilterAXA_BXB.IsChecked == true,
+                    FilterAXA_BYB = chkFilterAXA_BYB.IsChecked == true,
+                    FilterABABAC = chkFilterABABAC.IsChecked == true,
+                    FilterABACAC = chkFilterABACAC.IsChecked == true
                 };
 
                 // Reset to first page when applying filter
@@ -447,12 +457,23 @@ namespace Mobiphone
             {
                 // Clear all filter controls
                 txtFilterPhone.Clear();
-                chkFilterMiniThanTai.IsChecked = false;
-                chkFilterBigThanTai.IsChecked = false;
-                chkFilterLocPhat.IsChecked = false;
+
                 chkFilterTuQuy.IsChecked = false;
-                chkFilterTuQuyGiua.IsChecked = false;
-                chkFilterTamHoaKep.IsChecked = false;
+                chkFilterTaxi2.IsChecked = false;
+                chkFilterTaxi3.IsChecked = false;
+                chkFilterTaxi4.IsChecked = false;
+                chkFilterTaxi5.IsChecked = false;
+                chkFilterTaxiDu2.IsChecked = false;
+                chkFilterTaxiDu3.IsChecked = false;
+                chkFilterDuoiTien.IsChecked = false;
+                chkFilterSanhGiua.IsChecked = false;
+                chkFilterTamHoa.IsChecked = false;
+                chkFilterSoiGuong.IsChecked = false;
+                chkFilterAXA_AYA.IsChecked = false;
+                chkFilterAXA_BXB.IsChecked = false;
+                chkFilterAXA_BYB.IsChecked = false;
+                chkFilterABABAC.IsChecked = false;
+                chkFilterABACAC.IsChecked = false;
 
                 // Reset to first page
                 _currentPage = 1;

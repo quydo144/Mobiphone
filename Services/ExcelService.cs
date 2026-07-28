@@ -1,7 +1,7 @@
 using System.IO;
-using System.Linq;
 using OfficeOpenXml;
 using Mobiphone.Models;
+using System.Text.RegularExpressions;
 
 namespace Mobiphone.Services
 {
@@ -73,29 +73,149 @@ namespace Mobiphone.Services
         private void ClassifyPhoneType(Record record)
         {
             string phone = record.Phone;
+            int len = phone.Length;
 
-            // Check MINI thần tài: số thứ 8 (index 7) = "3" AND số thứ 9 (index 8) = "9"
-            record.MiniThanTai = phone[7] == '3' && phone[8] == '9';
+            // 1. TỨ QUÝ: Chứa dãy 4 số giống nhau liên tục (AAAA)
+            record.TuQuy = Regex.IsMatch(phone, @"(\d)\1{3}");
 
-            // Check BIG Thần tài: số thứ 8 = "7" AND số thứ 9 = "9"
-            record.BigThanTai = phone[7] == '7' && phone[8] == '9';
+            // 2. TAXI 2: Chứa 3 cặp số giống nhau ở đuôi (AB.AB.AB)
+            if (len >= 6)
+            {
+                string sub6 = phone.Substring(len - 6);
+                record.Taxi2 = sub6[0] == sub6[2] && sub6[2] == sub6[4] &&
+                               sub6[1] == sub6[3] && sub6[3] == sub6[5];
+            }
 
-            // Check Lộc phát: số thứ 8 = "6" AND số thứ 9 = "8"
-            record.LocPhat = phone[7] == '6' && phone[8] == '8';
+            // 3. TAXI 3: Chứa 2 bộ 3 số giống nhau ở đuôi (ABC.ABC)
+            if (len >= 6)
+            {
+                record.Taxi3 = phone.Substring(len - 6, 3) == phone.Substring(len - 3, 3);
+            }
 
-            // Check Tứ quý: 4 số cuối giống nhau (I=J=K=L)
-            record.TuQuy = phone[5] == phone[6] && phone[6] == phone[7] && phone[7] == phone[8];
+            // 4. TAXI 4: Chứa 2 bộ 4 số giống nhau ở đuôi (ABCD.ABCD)
+            if (len >= 8)
+            {
+                record.Taxi4 = phone.Substring(len - 8, 4) == phone.Substring(len - 4, 4);
+            }
 
-            // Check Tứ quý giữa: có 4 số liên tiếp giống nhau ở giữa
-            record.TuQuyGiua = (phone[0] == phone[1] && phone[1] == phone[2] && phone[2] == phone[3]) ||
-                                (phone[1] == phone[2] && phone[2] == phone[3] && phone[3] == phone[4]) ||
-                                (phone[2] == phone[3] && phone[3] == phone[4] && phone[4] == phone[5]) ||
-                                (phone[3] == phone[4] && phone[4] == phone[5] && phone[5] == phone[6]) ||
-                                (phone[4] == phone[5] && phone[5] == phone[6] && phone[6] == phone[7]);
+            // 5. TAXI 5: Chứa 2 bộ 5 số giống nhau ở đuôi (ABCDE.ABCDE)
+            if (len >= 10)
+            {
+                record.Taxi5 = phone.Substring(len - 10, 5) == phone.Substring(len - 5, 5);
+            }
 
-            // Check Tam hoa kép: G=H=I AND J=K=L
-            record.TamHoaKep = (phone[3] == phone[4] && phone[4] == phone[5]) &&
-                                (phone[6] == phone[7] && phone[7] == phone[8]);
+            // 6. TAXI DÙ 2: Chứa 3 cặp số ở đuôi dạng tiến/tăng dần (AB.A(B+1).A(B+2) hoặc AB.(A+1)B.(A+2)B)
+            if (len >= 6)
+            {
+                int d1 = phone[len - 6] - '0', d2 = phone[len - 5] - '0';
+                int d3 = phone[len - 4] - '0', d4 = phone[len - 3] - '0';
+                int d5 = phone[len - 2] - '0', d6 = phone[len - 1] - '0';
+                bool type1 = (d1 == d3 && d3 == d5) && (d4 == d2 + 1) && (d6 == d4 + 1);
+                bool type2 = (d2 == d4 && d4 == d6) && (d3 == d1 + 1) && (d5 == d3 + 1);
+                record.TaxiDu2 = type1 || type2;
+            }
+
+            // 7. TAXI DÙ 3: Chứa 2 bộ 3 số ở đuôi chỉ khác nhau 1 vị trí (ABC.ABD / ABC.DBC / ABD.ADC)
+            if (len >= 6)
+            {
+                string p1 = phone.Substring(len - 6, 3);
+                string p2 = phone.Substring(len - 3, 3);
+
+                int diffCount = 0;
+                for (int i = 0; i < 3; i++)
+                {
+                    if (p1[i] != p2[i]) diffCount++;
+                }
+                record.TaxiDu3 = (diffCount == 1);
+            }
+
+            // 8. ĐUÔI TIẾN: Chứa 3 số đuôi tăng dần liên tiếp A(A+1)(A+2)
+            if (len >= 3)
+            {
+                int a = phone[len - 3] - '0';
+                int b = phone[len - 2] - '0';
+                int c = phone[len - 1] - '0';
+                record.DuoiTien = (b == a + 1) && (c == b + 1);
+            }
+
+            // 9. SẢNH GIỮA: Có dãy 4 số tiến ở giữa, để lại 2 số đuôi A(A+1)(A+2)(A+3).??
+            record.SanhGiua = false;
+            if (len >= 6)
+            {
+                for (int i = 0; i <= len - 6; i++)
+                {
+                    int n1 = phone[i] - '0';
+                    int n2 = phone[i + 1] - '0';
+                    int n3 = phone[i + 2] - '0';
+                    int n4 = phone[i + 3] - '0';
+
+                    if (n2 == n1 + 1 && n3 == n2 + 1 && n4 == n3 + 1)
+                    {
+                        record.SanhGiua = true;
+                        break;
+                    }
+                }
+            }
+
+            // 10. TAM HOA: Có chứa 3 số giống nhau nằm ở CUỐI (AAA)
+            if (len >= 3)
+            {
+                record.TamHoa = (phone[len - 1] == phone[len - 2]) && (phone[len - 2] == phone[len - 3]);
+            }
+
+            // 11. SOI GƯƠNG: Có chứa 2 bộ 3 số (6 số đuôi), bộ 1 và bộ 2 cùng các số nhưng ngược thứ tự (Ví dụ: ABC.CBA)
+            if (len >= 6)
+            {
+                string p1 = phone.Substring(len - 6, 3);
+                string p2 = phone.Substring(len - 3, 3);
+                char[] arr = p2.ToCharArray();
+                Array.Reverse(arr);
+                string p2Reversed = new string(arr);
+
+                record.SoiGuong = (p1 == p2Reversed);
+            }
+
+            // 12. AXA.AYA: Cấu trúc 6 số đuôi AXA.AYA (chỉ số đuôi cuối cùng khác)
+            if (len >= 6)
+            {
+                string sub6 = phone.Substring(len - 6);
+                record.AXA_AYA = (sub6[0] == sub6[2] && sub6[2] == sub6[3] && sub6[3] == sub6[5]) &&
+                                 (sub6[1] != sub6[4]);
+            }
+
+            // 13. AXA.BXB: Cấu trúc 6 số đuôi AXA.BXB (chữ số ở giữa giống nhau)
+            if (len >= 6)
+            {
+                string sub6 = phone.Substring(len - 6);
+                record.AXA_BXB = (sub6[1] == sub6[4]) && (sub6[0] == sub6[2]) && (sub6[3] == sub6[5]) &&
+                                 (sub6[0] != sub6[3]);
+            }
+
+            // 14. AXA.BYB: Cấu trúc 6 số đuôi AXA.BYB
+            if (len >= 6)
+            {
+                string sub6 = phone.Substring(len - 6);
+                record.AXA_BYB = (sub6[0] == sub6[2]) && (sub6[3] == sub6[5]) &&
+                                 (sub6[0] != sub6[3]) && (sub6[1] != sub6[4]);
+            }
+
+            // 15. ABABAC: Dạng 6 số đuôi AB.AB.AC
+            if (len >= 6)
+            {
+                string sub6 = phone.Substring(len - 6);
+                record.ABABAC = (sub6[0] == sub6[2] && sub6[2] == sub6[4]) && // Chữ số A
+                                (sub6[1] == sub6[3]) &&                      // Chữ số B
+                                (sub6[1] != sub6[5]);                        // B khác C
+            }
+
+            // 16. ABACAC: Dạng 6 số đuôi AB.AC.AC
+            if (len >= 6)
+            {
+                string sub6 = phone.Substring(len - 6);
+                record.ABACAC = (sub6[0] == sub6[2] && sub6[2] == sub6[4]) && // Chữ số A
+                                (sub6[3] == sub6[5]) &&                      // Chữ số C
+                                (sub6[1] != sub6[3]);                        // B khác C
+            }
         }
     }
 }

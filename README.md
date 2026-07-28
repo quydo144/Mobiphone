@@ -2,51 +2,6 @@
 
 Ứng dụng WPF để quản lý và phân loại số điện thoại từ file Excel vào SQLite database với tính năng phân loại sim đặc biệt, filter nâng cao và hiệu suất cao.
 
-## Tính năng
-
-### Import & Database
-- ✅ **Import file Excel** - Chọn từng file hoặc cả folder
-- ✅ **Batch Import** - Scan và import tất cả file Excel trong folder
-- ✅ **Phone UNIQUE** - Tự động skip số trùng lặp
-- ✅ **Hỗ trợ phone 9-10 số** - Tự động bỏ số 0 đầu
-- ✅ **Progress Bar** - Hiển thị tiến trình import chi tiết
-- ✅ **Index trên Phone** - Query nhanh chóng
-- ✅ **Thống kê chi tiết** - imported, duplicates, errors
-
-### Phân loại sim đặc biệt
-- ✅ **MINI thần tài** - Số đuôi 39
-- ✅ **BIG Thần tài** - Số đuôi 79
-- ✅ **Lộc phát** - Số đuôi 68
-- ✅ **Tứ quý** - 4 số cuối giống nhau (IJKL)
-- ✅ **Tứ quý giữa** - 4 số liên tiếp giống nhau ở vị trí bất kỳ
-- ✅ **Tam hoa kép** - 3 số giống nhau + 3 số giống nhau (GHI = JKL)
-
-### Filter & Search
-- ✅ **Lọc theo Phone** - Tìm kiếm một phần số (LIKE)
-- ✅ **Lọc theo loại sim** - Chọn một hoặc nhiều loại (OR logic)
-- ✅ **Apply/Clear Filter** - Dễ dàng lọc và xóa lọc
-- ✅ **Filter State Management** - Giữ filter khi phân trang
-- ✅ **Hiển thị kết quả** - "Found X records" sau khi filter
-- ✅ **Total Records** - Luôn hiển thị tổng số records trong DB
-
-### UI & Display
-- ✅ **Layout 2 cột tối ưu**: Filter (60%) | Import (40%)
-- ✅ **Pagination hiệu năng cao** - 50/100/500/1000 records/page
-- ✅ **Navigation mượt mà** - First, Prev, Next, Last
-- ✅ **DataGrid với virtualization** - Xử lý hàng nghìn records mượt
-- ✅ **Checkbox display** - Hiển thị loại sim trực quan
-- ✅ **GridLines rõ ràng** - Dễ phân biệt cột và hàng
-- ✅ **Alternating rows** - Màu xen kẽ cho dễ đọc
-- ✅ **Responsive** - Tự động điều chỉnh kích thước
-
-### Performance Optimizations
-- ✅ **Row Virtualization** - Chỉ render rows hiển thị
-- ✅ **Column Virtualization** - Giảm tải rendering
-- ✅ **Recycling Mode** - Tái sử dụng rows
-- ✅ **Pixel Scrolling** - Scroll mượt mà
-- ✅ **Cache Optimization** - Cache 20 items trước/sau
-- ✅ **Async Operations** - Không block UI thread
-
 ## Yêu cầu
 
 - .NET 8.0 Runtime (sẽ được cài tự động khi cài MSI)
@@ -122,7 +77,6 @@ Mobiphone/
 ├── Mobiphone.csproj           # Project file
 ├── Mobiphone.sln              # Solution file
 ├── README.md                  # Documentation
-└── TODO.md                    # Development history
 ```
 
 ## Packages sử dụng
@@ -134,16 +88,6 @@ Mobiphone/
 ## Database
 
 Database SQLite sẽ được tạo tự động tại thư mục bin với tên `records.db`.
-
-### Bảng Records:
-- **Id** (INTEGER PRIMARY KEY AUTOINCREMENT)
-- **Phone** (TEXT NOT NULL UNIQUE) - Số điện thoại 9 chữ số
-- **MiniThanTai** (INTEGER) - 0/1 cho đuôi 39
-- **BigThanTai** (INTEGER) - 0/1 cho đuôi 79
-- **LocPhat** (INTEGER) - 0/1 cho đuôi 68
-- **TuQuy** (INTEGER) - 0/1 cho 4 số cuối giống nhau
-- **TuQuyGiua** (INTEGER) - 0/1 cho 4 số giống nhau ở giữa
-- **TamHoaKep** (INTEGER) - 0/1 cho 3+3 số giống nhau
 
 ### Index:
 - **idx_phone** ON Records(Phone) - Tăng tốc query
@@ -182,21 +126,6 @@ Database SQLite sẽ được tạo tự động tại thư mục bin với tên
 - **Pagination**: Chọn 50/100/500/1000 records/page
 - **Navigation**: First, Prev, Next, Last với filter state
 - **Smooth Scrolling**: Virtualization cho hiệu suất cao
-
-## Tính năng Phone Unique
-
-- Mỗi số điện thoại chỉ tồn tại **một lần duy nhất** trong database
-- Import cùng 1 file nhiều lần: chỉ phone mới được thêm vào
-- Tự động báo cáo số phone trùng lặp
-- Không cần kiểm tra file hash hay lịch sử import
-
-## Debug với VS Code
-
-- Nhấn **F5** để bắt đầu debug
-- Đặt breakpoint bằng cách click vào lề trái
-- Xem giá trị biến, step through code
-
-## Release mới (Cho Developer)
 
 ### Test release build locally
 

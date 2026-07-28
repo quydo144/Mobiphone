@@ -102,17 +102,7 @@ jobs:
           - **Database location**: `%LOCALAPPDATA%\Mobiphone\records.db`
           - Dữ liệu được lưu trong thư mục AppData của user (có quyền write đầy đủ)
           - MSI bao gồm đầy đủ dependencies (~60MB)
-          
-          ### Tính năng
-          - Chuyển đổi file Excel sang SQLite database
-          - Giao diện WPF thân thiện
-          - Phân loại sim đặc biệt (Thần tài, Lộc phát, Tứ quý, Tam hoa kép)
-          - Filter và tìm kiếm nâng cao theo nhiều tiêu chí
-          - Phân trang dữ liệu
-          
-          ### Yêu cầu hệ thống
-          - Windows 10/11 (64-bit)
-          - .NET 8.0 Runtime (đã được bundle sẵn trong installer)
+
         draft: false
         prerelease: false
       env:
