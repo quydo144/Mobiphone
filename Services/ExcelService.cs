@@ -217,6 +217,30 @@ namespace Mobiphone.Services
                                 (sub6[3] == sub6[5]) &&                      // Chữ số C
                                 (sub6[1] != sub6[3]);                        // B khác C
             }
+
+            // 17. XXXYYY: Dạng 3 số X + 3 số Y liên tiếp (X khác Y) ở vị trí bất kỳ
+            if (len >= 6)
+            {
+                bool isMatch = false;
+                for (int i = 0; i <= len - 6; i++)
+                {
+                    // Lấy 6 ký tự liên tiếp bắt đầu từ vị trí i
+                    char x1 = phone[i], x2 = phone[i + 1], x3 = phone[i + 2];
+                    char y1 = phone[i + 3], y2 = phone[i + 4], y3 = phone[i + 5];
+
+                    // Điều kiện: 3 số đầu giống nhau (X) AND 3 số sau giống nhau (Y) AND X khác Y
+                    if (x1 == x2 && x2 == x3 && y1 == y2 && y2 == y3 && x1 != y1)
+                    {
+                        isMatch = true;
+                        break; // Thỏa mãn rồi thì thoát vòng lặp ngay
+                    }
+                }
+                record.XXXYYY = isMatch;
+            }
+            else
+            {
+                record.XXXYYY = false;
+            }
         }
 
         public void ExportToExcel(List<Record> records, string filePath)
@@ -238,7 +262,7 @@ namespace Mobiphone.Services
                 {
                 "STT", "Số Điện Thoại", "Tứ Quý", "Taxi 2", "Taxi 3", "Taxi 4", "Taxi 5",
                 "Taxi Dư 2", "Taxi Dư 3", "Đuôi Tiến", "Sảnh Giữa", "Tam Hoa",
-                "Soi Gương", "AXA_AYA", "AXA_BXB", "AXA_BYB", "ABABAC", "ABACAC"
+                "Soi Gương", "AXA_AYA", "AXA_BXB", "AXA_BYB", "ABABAC", "ABACAC", "XXXYYY"
                 };
 
                 for (int col = 0; col < headers.Length; col++)
@@ -286,6 +310,7 @@ namespace Mobiphone.Services
                     worksheet.Cells[row, 16].Value = record.AXA_BYB ? "x" : "";
                     worksheet.Cells[row, 17].Value = record.ABABAC ? "x" : "";
                     worksheet.Cells[row, 18].Value = record.ABACAC ? "x" : "";
+                    worksheet.Cells[row, 19].Value = record.XXXYYY ? "x" : "";
 
                     // Định dạng căn giữa cho tất cả các cột dữ liệu trừ cột SĐT (căn trái)
                     for (int col = 1; col <= headers.Length; col++)
