@@ -21,6 +21,7 @@ namespace Mobiphone.Models
         public bool FilterAXA_BYB { get; set; } = false;
         public bool FilterABABAC { get; set; } = false;
         public bool FilterABACAC { get; set; } = false;
+        public bool FilterXXXYYY { get; set; } = false;
 
         public RecordFilterOptions()
         {
@@ -44,7 +45,8 @@ namespace Mobiphone.Models
             bool filterAXA_BXB = false,
             bool filterAXA_BYB = false,
             bool filterABABAC = false,
-            bool filterABACAC = false)
+            bool filterABACAC = false,
+            bool filterXXXYYY = false)
         {
             PhoneFilter = phoneFilter;
             FilterTuQuy = filterTuQuy;
@@ -63,6 +65,7 @@ namespace Mobiphone.Models
             FilterAXA_BYB = filterAXA_BYB;
             FilterABABAC = filterABABAC;
             FilterABACAC = filterABACAC;
+            FilterXXXYYY = filterXXXYYY;
         }
     }
 }

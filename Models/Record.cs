@@ -20,5 +20,6 @@ namespace Mobiphone.Models
         public bool AXA_BYB { get; set; } = false;
         public bool ABABAC { get; set; } = false;
         public bool ABACAC { get; set; } = false;
+        public bool XXXYYY { get; set; } = false;
     }
 }

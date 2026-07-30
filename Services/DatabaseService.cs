@@ -64,6 +64,21 @@ namespace Mobiphone.Services
                         command.ExecuteNonQuery();
                     }
 
+                    // 2. Thêm cột XXXYYY nếu DB cũ chưa có (Tránh crash ứng dụng)
+                    string addColumnQuery = @" ALTER TABLE Records ADD COLUMN XXXYYY INTEGER NOT NULL DEFAULT 0;";
+
+                    try
+                    {
+                        using (var cmd = new SQLiteCommand(addColumnQuery, connection))
+                        {
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                    catch (SQLiteException)
+                    {
+                        // Bỏ qua lỗi nếu cột đã tồn tại (duplicate column name)
+                    }
+
                     // Create index on Phone column for faster queries
                     string createIndexQuery = @"
                         CREATE INDEX IF NOT EXISTS idx_phone ON Records(Phone)";
@@ -99,11 +114,13 @@ namespace Mobiphone.Services
                             string insertQuery = @"INSERT OR IGNORE INTO Records (
                                     Phone, TuQuy, Taxi2, Taxi3, Taxi4, Taxi5, 
                                     TaxiDu2, TaxiDu3, DuoiTien, SanhGiua, TamHoa, 
-                                    SoiGuong, AXA_AYA, AXA_BXB, AXA_BYB, ABABAC, ABACAC
+                                    SoiGuong, AXA_AYA, AXA_BXB, AXA_BYB, ABABAC, ABACAC, 
+                                    XXXYYY
                                 ) VALUES (
                                     @Phone, @TuQuy, @Taxi2, @Taxi3, @Taxi4, @Taxi5, 
                                     @TaxiDu2, @TaxiDu3, @DuoiTien, @SanhGiua, @TamHoa, 
-                                    @SoiGuong, @AXA_AYA, @AXA_BXB, @AXA_BYB, @ABABAC, @ABACAC
+                                    @SoiGuong, @AXA_AYA, @AXA_BXB, @AXA_BYB, @ABABAC, @ABACAC, 
+                                    @XXXYYY
                                 )";
 
                             // Khởi tạo command một lần ngoài vòng lặp để tối ưu bộ nhớ & tốc độ
@@ -130,6 +147,7 @@ namespace Mobiphone.Services
                                     command.Parameters.AddWithValue("@AXA_BYB", record.AXA_BYB ? 1 : 0);
                                     command.Parameters.AddWithValue("@ABABAC", record.ABABAC ? 1 : 0);
                                     command.Parameters.AddWithValue("@ABACAC", record.ABACAC ? 1 : 0);
+                                    command.Parameters.AddWithValue("@XXXYYY", record.XXXYYY ? 1 : 0);
 
                                     int rowsAffected = command.ExecuteNonQuery();
 
@@ -194,6 +212,7 @@ namespace Mobiphone.Services
                     if (filterOptions.FilterAXA_BYB) typeConditions.Add("AXA_BYB = 1");
                     if (filterOptions.FilterABABAC) typeConditions.Add("ABABAC = 1");
                     if (filterOptions.FilterABACAC) typeConditions.Add("ABACAC = 1");
+                    if (filterOptions.FilterXXXYYY) typeConditions.Add("XXXYYY = 1");
 
                     var allConditions = new List<string>();
 
@@ -215,7 +234,8 @@ namespace Mobiphone.Services
                         SELECT 
                             Id, Phone, TuQuy, Taxi2, Taxi3, Taxi4, Taxi5, 
                             TaxiDu2, TaxiDu3, DuoiTien, SanhGiua, TamHoa, 
-                            SoiGuong, AXA_AYA, AXA_BXB, AXA_BYB, ABABAC, ABACAC
+                            SoiGuong, AXA_AYA, AXA_BXB, AXA_BYB, ABABAC, ABACAC,
+                            XXXYYY
                         FROM Records 
                         {whereClause}
                         ORDER BY Id DESC 
@@ -255,7 +275,8 @@ namespace Mobiphone.Services
                                     AXA_BXB = reader.GetInt32(14) == 1,
                                     AXA_BYB = reader.GetInt32(15) == 1,
                                     ABABAC = reader.GetInt32(16) == 1,
-                                    ABACAC = reader.GetInt32(17) == 1
+                                    ABACAC = reader.GetInt32(17) == 1,
+                                    XXXYYY = reader.GetInt32(18) == 1
                                 };
                                 records.Add(record);
                             }
@@ -300,6 +321,7 @@ namespace Mobiphone.Services
                     if (filterOptions.FilterAXA_BYB) typeConditions.Add("AXA_BYB = 1");
                     if (filterOptions.FilterABABAC) typeConditions.Add("ABABAC = 1");
                     if (filterOptions.FilterABACAC) typeConditions.Add("ABACAC = 1");
+                    if (filterOptions.FilterXXXYYY) typeConditions.Add("XXXYYY = 1");
 
                     var allConditions = new List<string>();
 
@@ -321,7 +343,8 @@ namespace Mobiphone.Services
                         SELECT 
                             Id, Phone, TuQuy, Taxi2, Taxi3, Taxi4, Taxi5, 
                             TaxiDu2, TaxiDu3, DuoiTien, SanhGiua, TamHoa, 
-                            SoiGuong, AXA_AYA, AXA_BXB, AXA_BYB, ABABAC, ABACAC
+                            SoiGuong, AXA_AYA, AXA_BXB, AXA_BYB, ABABAC, ABACAC,
+                            XXXYYY
                         FROM Records 
                         {whereClause}
                         ORDER BY Id DESC";
@@ -357,7 +380,8 @@ namespace Mobiphone.Services
                                     AXA_BXB = reader.GetInt32(14) == 1,
                                     AXA_BYB = reader.GetInt32(15) == 1,
                                     ABABAC = reader.GetInt32(16) == 1,
-                                    ABACAC = reader.GetInt32(17) == 1
+                                    ABACAC = reader.GetInt32(17) == 1,
+                                    XXXYYY = reader.GetInt32(18) == 1
                                 };
                                 records.Add(record);
                             }
@@ -399,6 +423,7 @@ namespace Mobiphone.Services
                     if (filterOptions.FilterAXA_BYB) typeConditions.Add("AXA_BYB = 1");
                     if (filterOptions.FilterABABAC) typeConditions.Add("ABABAC = 1");
                     if (filterOptions.FilterABACAC) typeConditions.Add("ABACAC = 1");
+                    if (filterOptions.FilterXXXYYY) typeConditions.Add("XXXYYY = 1");
 
                     var allConditions = new List<string>();
 
@@ -430,6 +455,27 @@ namespace Mobiphone.Services
             catch (Exception ex)
             {
                 throw new Exception($"Error getting record count: {ex.Message}", ex);
+            }
+        }
+
+        public void TruncateRecordsTable()
+        {
+            using (var connection = new SQLiteConnection(_connectionString))
+            {
+                connection.Open();
+
+                string sql = @"DELETE FROM Records;
+                               DELETE FROM sqlite_sequence WHERE name = 'Records';";
+
+                using (var command = new SQLiteCommand(sql, connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+
+                using (var vacuumCmd = new SQLiteCommand("VACUUM;", connection))
+                {
+                    vacuumCmd.ExecuteNonQuery();
+                }
             }
         }
     }
