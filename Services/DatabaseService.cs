@@ -196,23 +196,8 @@ namespace Mobiphone.Services
                     // Build WHERE clause
                     var typeConditions = new List<string>();
 
-                    if (filterOptions.FilterTuQuy) typeConditions.Add("TuQuy = 1");
-                    if (filterOptions.FilterTaxi2) typeConditions.Add("Taxi2 = 1");
-                    if (filterOptions.FilterTaxi3) typeConditions.Add("Taxi3 = 1");
-                    if (filterOptions.FilterTaxi4) typeConditions.Add("Taxi4 = 1");
-                    if (filterOptions.FilterTaxi5) typeConditions.Add("Taxi5 = 1");
-                    if (filterOptions.FilterTaxiDu2) typeConditions.Add("TaxiDu2 = 1");
-                    if (filterOptions.FilterTaxiDu3) typeConditions.Add("TaxiDu3 = 1");
-                    if (filterOptions.FilterDuoiTien) typeConditions.Add("DuoiTien = 1");
-                    if (filterOptions.FilterSanhGiua) typeConditions.Add("SanhGiua = 1");
-                    if (filterOptions.FilterTamHoa) typeConditions.Add("TamHoa = 1");
-                    if (filterOptions.FilterSoiGuong) typeConditions.Add("SoiGuong = 1");
-                    if (filterOptions.FilterAXA_AYA) typeConditions.Add("AXA_AYA = 1");
-                    if (filterOptions.FilterAXA_BXB) typeConditions.Add("AXA_BXB = 1");
-                    if (filterOptions.FilterAXA_BYB) typeConditions.Add("AXA_BYB = 1");
-                    if (filterOptions.FilterABABAC) typeConditions.Add("ABABAC = 1");
-                    if (filterOptions.FilterABACAC) typeConditions.Add("ABACAC = 1");
-                    if (filterOptions.FilterXXXYYY) typeConditions.Add("XXXYYY = 1");
+                    AddStoredTypeConditions(filterOptions, typeConditions);
+                    AddAdvancedTypeConditions(filterOptions, typeConditions);
 
                     var allConditions = new List<string>();
 
@@ -221,6 +206,7 @@ namespace Mobiphone.Services
                     {
                         allConditions.Add("Phone LIKE @PhoneFilter");
                     }
+                    AddExclusionCondition(filterOptions, allConditions);
 
                     // Gộp các điều kiện loại sim theo OR
                     if (typeConditions.Count > 0)
@@ -305,23 +291,8 @@ namespace Mobiphone.Services
                     // Build WHERE clause
                     var typeConditions = new List<string>();
 
-                    if (filterOptions.FilterTuQuy) typeConditions.Add("TuQuy = 1");
-                    if (filterOptions.FilterTaxi2) typeConditions.Add("Taxi2 = 1");
-                    if (filterOptions.FilterTaxi3) typeConditions.Add("Taxi3 = 1");
-                    if (filterOptions.FilterTaxi4) typeConditions.Add("Taxi4 = 1");
-                    if (filterOptions.FilterTaxi5) typeConditions.Add("Taxi5 = 1");
-                    if (filterOptions.FilterTaxiDu2) typeConditions.Add("TaxiDu2 = 1");
-                    if (filterOptions.FilterTaxiDu3) typeConditions.Add("TaxiDu3 = 1");
-                    if (filterOptions.FilterDuoiTien) typeConditions.Add("DuoiTien = 1");
-                    if (filterOptions.FilterSanhGiua) typeConditions.Add("SanhGiua = 1");
-                    if (filterOptions.FilterTamHoa) typeConditions.Add("TamHoa = 1");
-                    if (filterOptions.FilterSoiGuong) typeConditions.Add("SoiGuong = 1");
-                    if (filterOptions.FilterAXA_AYA) typeConditions.Add("AXA_AYA = 1");
-                    if (filterOptions.FilterAXA_BXB) typeConditions.Add("AXA_BXB = 1");
-                    if (filterOptions.FilterAXA_BYB) typeConditions.Add("AXA_BYB = 1");
-                    if (filterOptions.FilterABABAC) typeConditions.Add("ABABAC = 1");
-                    if (filterOptions.FilterABACAC) typeConditions.Add("ABACAC = 1");
-                    if (filterOptions.FilterXXXYYY) typeConditions.Add("XXXYYY = 1");
+                    AddStoredTypeConditions(filterOptions, typeConditions);
+                    AddAdvancedTypeConditions(filterOptions, typeConditions);
 
                     var allConditions = new List<string>();
 
@@ -330,6 +301,7 @@ namespace Mobiphone.Services
                     {
                         allConditions.Add("Phone LIKE @PhoneFilter");
                     }
+                    AddExclusionCondition(filterOptions, allConditions);
 
                     // Gộp các điều kiện loại sim theo OR
                     if (typeConditions.Count > 0)
@@ -407,23 +379,8 @@ namespace Mobiphone.Services
 
                     var typeConditions = new List<string>();
 
-                    if (filterOptions.FilterTuQuy) typeConditions.Add("TuQuy = 1");
-                    if (filterOptions.FilterTaxi2) typeConditions.Add("Taxi2 = 1");
-                    if (filterOptions.FilterTaxi3) typeConditions.Add("Taxi3 = 1");
-                    if (filterOptions.FilterTaxi4) typeConditions.Add("Taxi4 = 1");
-                    if (filterOptions.FilterTaxi5) typeConditions.Add("Taxi5 = 1");
-                    if (filterOptions.FilterTaxiDu2) typeConditions.Add("TaxiDu2 = 1");
-                    if (filterOptions.FilterTaxiDu3) typeConditions.Add("TaxiDu3 = 1");
-                    if (filterOptions.FilterDuoiTien) typeConditions.Add("DuoiTien = 1");
-                    if (filterOptions.FilterSanhGiua) typeConditions.Add("SanhGiua = 1");
-                    if (filterOptions.FilterTamHoa) typeConditions.Add("TamHoa = 1");
-                    if (filterOptions.FilterSoiGuong) typeConditions.Add("SoiGuong = 1");
-                    if (filterOptions.FilterAXA_AYA) typeConditions.Add("AXA_AYA = 1");
-                    if (filterOptions.FilterAXA_BXB) typeConditions.Add("AXA_BXB = 1");
-                    if (filterOptions.FilterAXA_BYB) typeConditions.Add("AXA_BYB = 1");
-                    if (filterOptions.FilterABABAC) typeConditions.Add("ABABAC = 1");
-                    if (filterOptions.FilterABACAC) typeConditions.Add("ABACAC = 1");
-                    if (filterOptions.FilterXXXYYY) typeConditions.Add("XXXYYY = 1");
+                    AddStoredTypeConditions(filterOptions, typeConditions);
+                    AddAdvancedTypeConditions(filterOptions, typeConditions);
 
                     var allConditions = new List<string>();
 
@@ -431,6 +388,7 @@ namespace Mobiphone.Services
                     {
                         allConditions.Add("Phone LIKE @PhoneFilter");
                     }
+                    AddExclusionCondition(filterOptions, allConditions);
 
                     if (typeConditions.Count > 0)
                     {
@@ -455,6 +413,70 @@ namespace Mobiphone.Services
             catch (Exception ex)
             {
                 throw new Exception($"Error getting record count: {ex.Message}", ex);
+            }
+        }
+
+        private static void AddStoredTypeConditions(RecordFilterOptions filterOptions, List<string> conditions)
+        {
+            if (filterOptions.FilterTuQuy) conditions.Add("TuQuy = 1");
+            if (filterOptions.FilterTaxi2) conditions.Add("Taxi2 = 1");
+            if (filterOptions.FilterTaxi3) conditions.Add("Taxi3 = 1");
+            if (filterOptions.FilterTaxi4) conditions.Add("Taxi4 = 1");
+            if (filterOptions.FilterTaxi5) conditions.Add("Taxi5 = 1");
+            if (filterOptions.FilterTaxiDu2) conditions.Add("TaxiDu2 = 1");
+            if (filterOptions.FilterTaxiDu3) conditions.Add("TaxiDu3 = 1");
+            if (filterOptions.FilterDuoiTien) conditions.Add("DuoiTien = 1");
+            if (filterOptions.FilterSanhGiua) conditions.Add("SanhGiua = 1");
+            if (filterOptions.FilterTamHoa) conditions.Add("TamHoa = 1");
+            if (filterOptions.FilterSoiGuong) conditions.Add("SoiGuong = 1");
+            if (filterOptions.FilterAXA_AYA) conditions.Add("AXA_AYA = 1");
+            if (filterOptions.FilterAXA_BXB) conditions.Add("AXA_BXB = 1");
+            if (filterOptions.FilterAXA_BYB) conditions.Add("AXA_BYB = 1");
+            if (filterOptions.FilterABABAC) conditions.Add("ABABAC = 1");
+            if (filterOptions.FilterABACAC) conditions.Add("ABACAC = 1");
+            if (filterOptions.FilterXXXYYY) conditions.Add("XXXYYY = 1");
+        }
+
+        private static void AddAdvancedTypeConditions(RecordFilterOptions filterOptions, List<string> conditions)
+        {
+            // Các mẫu đều được xét trên 6 số cuối. substr(..., -6, n) dùng chỉ số
+            // tương đối từ cuối chuỗi nên hoạt động với cả dữ liệu 9 và 10 chữ số.
+            if (filterOptions.FilterXXAYYA)
+            {
+                conditions.Add("(length(Phone) >= 6 AND substr(Phone,-6,1)=substr(Phone,-5,1) AND substr(Phone,-3,1)=substr(Phone,-2,1) AND substr(Phone,-4,1)=substr(Phone,-1,1))");
+            }
+
+            if (filterOptions.FilterXAXBXC)
+            {
+                conditions.Add("(length(Phone) >= 6 AND substr(Phone,-6,1)=substr(Phone,-4,1) AND substr(Phone,-4,1)=substr(Phone,-2,1))");
+            }
+
+            if (filterOptions.FilterAXBXCX)
+            {
+                conditions.Add("(length(Phone) >= 6 AND substr(Phone,-5,1)=substr(Phone,-3,1) AND substr(Phone,-3,1)=substr(Phone,-1,1))");
+            }
+
+            if (filterOptions.FilterDuoiDacBiet)
+            {
+                conditions.Add("substr(Phone,-2) IN ('39','43','79','68','52','99','86','89')");
+            }
+
+            if (filterOptions.FilterTaxiDu3Tang1)
+            {
+                conditions.Add(@"(length(Phone) >= 6 AND (
+                    (substr(Phone,-5,1)=substr(Phone,-2,1) AND substr(Phone,-4,1)=substr(Phone,-1,1) AND CAST(substr(Phone,-3,1) AS INTEGER)=CAST(substr(Phone,-6,1) AS INTEGER)+1)
+                    OR (substr(Phone,-6,1)=substr(Phone,-3,1) AND substr(Phone,-4,1)=substr(Phone,-1,1) AND CAST(substr(Phone,-2,1) AS INTEGER)=CAST(substr(Phone,-5,1) AS INTEGER)+1)
+                    OR (substr(Phone,-6,1)=substr(Phone,-3,1) AND substr(Phone,-5,1)=substr(Phone,-2,1) AND CAST(substr(Phone,-1,1) AS INTEGER)=CAST(substr(Phone,-4,1) AS INTEGER)+1)
+                ))");
+            }
+        }
+
+        private static void AddExclusionCondition(RecordFilterOptions filterOptions, List<string> conditions)
+        {
+            if (filterOptions.ExcludeBadSequences)
+            {
+                // Theo yêu cầu, loại khi 4, 49, 53 hoặc 74 xuất hiện ở bất kỳ vị trí nào.
+                conditions.Add("(instr(Phone,'4')=0 AND instr(Phone,'49')=0 AND instr(Phone,'53')=0 AND instr(Phone,'74')=0)");
             }
         }
 

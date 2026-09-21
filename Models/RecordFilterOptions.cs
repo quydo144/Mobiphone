@@ -22,6 +22,12 @@ namespace Mobiphone.Models
         public bool FilterABABAC { get; set; } = false;
         public bool FilterABACAC { get; set; } = false;
         public bool FilterXXXYYY { get; set; } = false;
+        public bool FilterXXAYYA { get; set; } = false;
+        public bool FilterXAXBXC { get; set; } = false;
+        public bool FilterAXBXCX { get; set; } = false;
+        public bool FilterDuoiDacBiet { get; set; } = false;
+        public bool ExcludeBadSequences { get; set; } = false;
+        public bool FilterTaxiDu3Tang1 { get; set; } = false;
 
         public RecordFilterOptions()
         {

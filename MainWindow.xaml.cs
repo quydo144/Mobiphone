@@ -268,7 +268,13 @@ namespace Mobiphone
                     FilterAXA_BYB = chkFilterAXA_BYB.IsChecked == true,
                     FilterABABAC = chkFilterABABAC.IsChecked == true,
                     FilterABACAC = chkFilterABACAC.IsChecked == true,
-                    FilterXXXYYY = chkFilterXXXYYY.IsChecked == true
+                    FilterXXXYYY = chkFilterXXXYYY.IsChecked == true,
+                    FilterXXAYYA = chkFilterXXAYYA.IsChecked == true,
+                    FilterXAXBXC = chkFilterXAXBXC.IsChecked == true,
+                    FilterAXBXCX = chkFilterAXBXCX.IsChecked == true,
+                    FilterDuoiDacBiet = chkFilterDuoiDacBiet.IsChecked == true,
+                    ExcludeBadSequences = chkExcludeBadSequences.IsChecked == true,
+                    FilterTaxiDu3Tang1 = chkFilterTaxiDu3Tang1.IsChecked == true
                 };
 
                 // Reset to first page when applying filter
@@ -311,6 +317,12 @@ namespace Mobiphone
                 chkFilterABABAC.IsChecked = false;
                 chkFilterABACAC.IsChecked = false;
                 chkFilterXXXYYY.IsChecked = false;
+                chkFilterXXAYYA.IsChecked = false;
+                chkFilterXAXBXC.IsChecked = false;
+                chkFilterAXBXCX.IsChecked = false;
+                chkFilterDuoiDacBiet.IsChecked = false;
+                chkExcludeBadSequences.IsChecked = false;
+                chkFilterTaxiDu3Tang1.IsChecked = false;
 
                 // Reset to first page
                 _currentPage = 1;
@@ -380,7 +392,13 @@ namespace Mobiphone
                     FilterAXA_BYB = chkFilterAXA_BYB.IsChecked == true,
                     FilterABABAC = chkFilterABABAC.IsChecked == true,
                     FilterABACAC = chkFilterABACAC.IsChecked == true,
-                    FilterXXXYYY = chkFilterXXXYYY.IsChecked == true
+                    FilterXXXYYY = chkFilterXXXYYY.IsChecked == true,
+                    FilterXXAYYA = chkFilterXXAYYA.IsChecked == true,
+                    FilterXAXBXC = chkFilterXAXBXC.IsChecked == true,
+                    FilterAXBXCX = chkFilterAXBXCX.IsChecked == true,
+                    FilterDuoiDacBiet = chkFilterDuoiDacBiet.IsChecked == true,
+                    ExcludeBadSequences = chkExcludeBadSequences.IsChecked == true,
+                    FilterTaxiDu3Tang1 = chkFilterTaxiDu3Tang1.IsChecked == true
                 };
 
                 _currentFilter = filterOptions;
@@ -441,6 +459,12 @@ namespace Mobiphone
             if (filter.FilterABABAC) activeFilters.Add("ABABAC");
             if (filter.FilterABACAC) activeFilters.Add("ABACAC");
             if (filter.FilterXXXYYY) activeFilters.Add("XXXYYY");
+            if (filter.FilterXXAYYA) activeFilters.Add("XXAYYA");
+            if (filter.FilterXAXBXC) activeFilters.Add("XAXBXC");
+            if (filter.FilterAXBXCX) activeFilters.Add("AXBXCX");
+            if (filter.FilterDuoiDacBiet) activeFilters.Add("DuoiDacBiet");
+            if (filter.ExcludeBadSequences) activeFilters.Add("LoaiChuoiXau");
+            if (filter.FilterTaxiDu3Tang1) activeFilters.Add("TaxiDu3Tang1");
 
             string filterSuffix = "";
             if (activeFilters.Count > 0)
