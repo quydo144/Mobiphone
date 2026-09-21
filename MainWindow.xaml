@@ -112,6 +112,28 @@
                         <CheckBox x:Name="chkFilterXXXYYY"
                                   Content="XXXYYY"
                                   Margin="0,0,15,8"/>
+                        <CheckBox x:Name="chkFilterXXAYYA"
+                                  Content="XXAYYA"
+                                  ToolTip="Ví dụ: 009229"
+                                  Margin="0,0,15,8"/>
+                        <CheckBox x:Name="chkFilterXAXBXC"
+                                  Content="XAXBXC"
+                                  ToolTip="Ví dụ: 171912"
+                                  Margin="0,0,15,8"/>
+                        <CheckBox x:Name="chkFilterAXBXCX"
+                                  Content="AXBXCX"
+                                  ToolTip="Ví dụ: 698929"
+                                  Margin="0,0,15,8"/>
+                        <CheckBox x:Name="chkFilterDuoiDacBiet"
+                                  Content="Đuôi 39/43/79/68/52/99/86/89"
+                                  Margin="0,0,15,8"/>
+                        <CheckBox x:Name="chkExcludeBadSequences"
+                                  Content="Loại 4/49/53/74 ở mọi vị trí"
+                                  Margin="0,0,15,8"/>
+                        <CheckBox x:Name="chkFilterTaxiDu3Tang1"
+                                  Content="Taxi dù 3 tăng 1"
+                                  ToolTip="Hai cụm 3 số chỉ khác một vị trí và vị trí sau tăng đúng 1"
+                                  Margin="0,0,15,8"/>
                     </WrapPanel>
 
                     <Grid Margin="0,0,0,10">
