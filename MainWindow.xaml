@@ -127,14 +127,20 @@
                         <CheckBox x:Name="chkFilterDuoiDacBiet"
                                   Content="Đuôi 39/43/79/68/52/99/86/89"
                                   Margin="0,0,15,8"/>
-                        <CheckBox x:Name="chkExcludeBadSequences"
-                                  Content="Loại 4/49/53/74 ở mọi vị trí"
-                                  Margin="0,0,15,8"/>
                         <CheckBox x:Name="chkFilterTaxiDu3Tang1"
                                   Content="Taxi dù 3 tăng 1"
                                   ToolTip="Hai cụm 3 số chỉ khác một vị trí và vị trí sau tăng đúng 1"
                                   Margin="0,0,15,8"/>
                     </WrapPanel>
+
+                    <TextBlock Text="HÀM LỌC BỔ SUNG"
+                               FontWeight="SemiBold"
+                               FontSize="16"
+                               Margin="0,0,0,10"/>
+                    <CheckBox x:Name="chkExcludeBadSequences"
+                              Content="Loại 4/49/53/74 ở mọi vị trí"
+                              ToolTip="Điều kiện bổ sung, kết hợp AND với các loại sim đã chọn"
+                              Margin="0,0,15,15"/>
 
                     <Grid Margin="0,0,0,10">
                         <Grid.ColumnDefinitions>
@@ -400,6 +406,21 @@
                 <DataGridCheckBoxColumn Header="XXXYYY"
                                         Binding="{Binding XXXYYY}"
                                         Width="80"/>
+                <DataGridCheckBoxColumn Header="XXAYYA"
+                                        Binding="{Binding XXAYYA}"
+                                        Width="80"/>
+                <DataGridCheckBoxColumn Header="XAXBXC"
+                                        Binding="{Binding XAXBXC}"
+                                        Width="80"/>
+                <DataGridCheckBoxColumn Header="AXBXCX"
+                                        Binding="{Binding AXBXCX}"
+                                        Width="80"/>
+                <DataGridCheckBoxColumn Header="Đuôi đặc biệt"
+                                        Binding="{Binding DuoiDacBiet}"
+                                        Width="105"/>
+                <DataGridCheckBoxColumn Header="Taxi dù 3 tăng 1"
+                                        Binding="{Binding TaxiDu3Tang1}"
+                                        Width="115"/>
             </DataGrid.Columns>
         </DataGrid>
 

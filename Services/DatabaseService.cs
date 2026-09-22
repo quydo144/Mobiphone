@@ -221,7 +221,16 @@ namespace Mobiphone.Services
                             Id, Phone, TuQuy, Taxi2, Taxi3, Taxi4, Taxi5, 
                             TaxiDu2, TaxiDu3, DuoiTien, SanhGiua, TamHoa, 
                             SoiGuong, AXA_AYA, AXA_BXB, AXA_BYB, ABABAC, ABACAC,
-                            XXXYYY
+                            XXXYYY,
+                            (length(Phone) >= 6 AND substr(Phone,-6,1)=substr(Phone,-5,1) AND substr(Phone,-3,1)=substr(Phone,-2,1) AND substr(Phone,-4,1)=substr(Phone,-1,1)) AS XXAYYA,
+                            (length(Phone) >= 6 AND substr(Phone,-6,1)=substr(Phone,-4,1) AND substr(Phone,-4,1)=substr(Phone,-2,1)) AS XAXBXC,
+                            (length(Phone) >= 6 AND substr(Phone,-5,1)=substr(Phone,-3,1) AND substr(Phone,-3,1)=substr(Phone,-1,1)) AS AXBXCX,
+                            (substr(Phone,-2) IN ('39','43','79','68','52','99','86','89')) AS DuoiDacBiet,
+                            (length(Phone) >= 6 AND (
+                                (substr(Phone,-5,1)=substr(Phone,-2,1) AND substr(Phone,-4,1)=substr(Phone,-1,1) AND CAST(substr(Phone,-3,1) AS INTEGER)=CAST(substr(Phone,-6,1) AS INTEGER)+1)
+                                OR (substr(Phone,-6,1)=substr(Phone,-3,1) AND substr(Phone,-4,1)=substr(Phone,-1,1) AND CAST(substr(Phone,-2,1) AS INTEGER)=CAST(substr(Phone,-5,1) AS INTEGER)+1)
+                                OR (substr(Phone,-6,1)=substr(Phone,-3,1) AND substr(Phone,-5,1)=substr(Phone,-2,1) AND CAST(substr(Phone,-1,1) AS INTEGER)=CAST(substr(Phone,-4,1) AS INTEGER)+1)
+                            )) AS TaxiDu3Tang1
                         FROM Records 
                         {whereClause}
                         ORDER BY Id DESC 
@@ -262,7 +271,12 @@ namespace Mobiphone.Services
                                     AXA_BYB = reader.GetInt32(15) == 1,
                                     ABABAC = reader.GetInt32(16) == 1,
                                     ABACAC = reader.GetInt32(17) == 1,
-                                    XXXYYY = reader.GetInt32(18) == 1
+                                    XXXYYY = reader.GetInt32(18) == 1,
+                                    XXAYYA = reader.GetInt32(19) == 1,
+                                    XAXBXC = reader.GetInt32(20) == 1,
+                                    AXBXCX = reader.GetInt32(21) == 1,
+                                    DuoiDacBiet = reader.GetInt32(22) == 1,
+                                    TaxiDu3Tang1 = reader.GetInt32(23) == 1
                                 };
                                 records.Add(record);
                             }
@@ -316,7 +330,16 @@ namespace Mobiphone.Services
                             Id, Phone, TuQuy, Taxi2, Taxi3, Taxi4, Taxi5, 
                             TaxiDu2, TaxiDu3, DuoiTien, SanhGiua, TamHoa, 
                             SoiGuong, AXA_AYA, AXA_BXB, AXA_BYB, ABABAC, ABACAC,
-                            XXXYYY
+                            XXXYYY,
+                            (length(Phone) >= 6 AND substr(Phone,-6,1)=substr(Phone,-5,1) AND substr(Phone,-3,1)=substr(Phone,-2,1) AND substr(Phone,-4,1)=substr(Phone,-1,1)) AS XXAYYA,
+                            (length(Phone) >= 6 AND substr(Phone,-6,1)=substr(Phone,-4,1) AND substr(Phone,-4,1)=substr(Phone,-2,1)) AS XAXBXC,
+                            (length(Phone) >= 6 AND substr(Phone,-5,1)=substr(Phone,-3,1) AND substr(Phone,-3,1)=substr(Phone,-1,1)) AS AXBXCX,
+                            (substr(Phone,-2) IN ('39','43','79','68','52','99','86','89')) AS DuoiDacBiet,
+                            (length(Phone) >= 6 AND (
+                                (substr(Phone,-5,1)=substr(Phone,-2,1) AND substr(Phone,-4,1)=substr(Phone,-1,1) AND CAST(substr(Phone,-3,1) AS INTEGER)=CAST(substr(Phone,-6,1) AS INTEGER)+1)
+                                OR (substr(Phone,-6,1)=substr(Phone,-3,1) AND substr(Phone,-4,1)=substr(Phone,-1,1) AND CAST(substr(Phone,-2,1) AS INTEGER)=CAST(substr(Phone,-5,1) AS INTEGER)+1)
+                                OR (substr(Phone,-6,1)=substr(Phone,-3,1) AND substr(Phone,-5,1)=substr(Phone,-2,1) AND CAST(substr(Phone,-1,1) AS INTEGER)=CAST(substr(Phone,-4,1) AS INTEGER)+1)
+                            )) AS TaxiDu3Tang1
                         FROM Records 
                         {whereClause}
                         ORDER BY Id DESC";
@@ -353,7 +376,12 @@ namespace Mobiphone.Services
                                     AXA_BYB = reader.GetInt32(15) == 1,
                                     ABABAC = reader.GetInt32(16) == 1,
                                     ABACAC = reader.GetInt32(17) == 1,
-                                    XXXYYY = reader.GetInt32(18) == 1
+                                    XXXYYY = reader.GetInt32(18) == 1,
+                                    XXAYYA = reader.GetInt32(19) == 1,
+                                    XAXBXC = reader.GetInt32(20) == 1,
+                                    AXBXCX = reader.GetInt32(21) == 1,
+                                    DuoiDacBiet = reader.GetInt32(22) == 1,
+                                    TaxiDu3Tang1 = reader.GetInt32(23) == 1
                                 };
                                 records.Add(record);
                             }

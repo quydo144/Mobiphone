@@ -2,10 +2,11 @@
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
   <Package Name="SC Hoang Quoc" 
            Manufacturer="SC Hoang Quoc" 
-           Version="1.0.0.0"
+           Version="$(var.ProductVersion)"
            UpgradeCode="448B8468-32D0-4EF8-90AA-BF5DD8C1AA75">
     
-    <MajorUpgrade DowngradeErrorMessage="Đã cài đặt phiên bản mới hơn của [ProductName]." />
+    <MajorUpgrade AllowSameVersionUpgrades="yes"
+                  DowngradeErrorMessage="Đã cài đặt phiên bản mới hơn của [ProductName]." />
     
     <MediaTemplate EmbedCab="yes" />
     <Property Id="ARPPRODUCTICON" Value="AppIcon" /> 

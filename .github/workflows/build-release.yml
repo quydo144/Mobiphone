@@ -94,6 +94,8 @@ jobs:
             -c Release `
             -r win-x64 `
             --self-contained true `
+            -p:Version=${{ steps.version.outputs.VERSION }} `
+            -p:FileVersion=${{ steps.version.outputs.VERSION }}.0 `
             -p:PublishSingleFile=false `
             -p:PublishReadyToRun=true `
             -o bin/Release/net8.0-windows/win-x64/publish
@@ -111,14 +113,6 @@ jobs:
             -OutputFile "Installer\HarvestedFiles.wxs"
 
       # ========================================
-      # Add WiX Extension
-      # ========================================
-      - name: Add WiX Extension
-        shell: pwsh
-        run: |
-          wix extension add WixToolset.Util.wixext
-
-      # ========================================
       # Build MSI
       # ========================================
       - name: Build WiX Installer
@@ -128,6 +122,7 @@ jobs:
           wix build Package.wxs HarvestedFiles.wxs `
             -arch x64 `
             -d PublishDir=..\bin\Release\net8.0-windows\win-x64\publish `
+            -d ProductVersion=${{ steps.version.outputs.VERSION }} `
             -out "../SC Hoang Quoc.msi"
 
       # ========================================

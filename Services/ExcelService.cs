@@ -262,7 +262,8 @@ namespace Mobiphone.Services
                 {
                 "STT", "Số Điện Thoại", "Tứ Quý", "Taxi 2", "Taxi 3", "Taxi 4", "Taxi 5",
                 "Taxi Dư 2", "Taxi Dư 3", "Đuôi Tiến", "Sảnh Giữa", "Tam Hoa",
-                "Soi Gương", "AXA_AYA", "AXA_BXB", "AXA_BYB", "ABABAC", "ABACAC", "XXXYYY"
+                "Soi Gương", "AXA_AYA", "AXA_BXB", "AXA_BYB", "ABABAC", "ABACAC", "XXXYYY",
+                "XXAYYA", "XAXBXC", "AXBXCX", "Đuôi đặc biệt", "Taxi dù 3 tăng 1"
                 };
 
                 for (int col = 0; col < headers.Length; col++)
@@ -311,6 +312,11 @@ namespace Mobiphone.Services
                     worksheet.Cells[row, 17].Value = record.ABABAC ? "x" : "";
                     worksheet.Cells[row, 18].Value = record.ABACAC ? "x" : "";
                     worksheet.Cells[row, 19].Value = record.XXXYYY ? "x" : "";
+                    worksheet.Cells[row, 20].Value = record.XXAYYA ? "x" : "";
+                    worksheet.Cells[row, 21].Value = record.XAXBXC ? "x" : "";
+                    worksheet.Cells[row, 22].Value = record.AXBXCX ? "x" : "";
+                    worksheet.Cells[row, 23].Value = record.DuoiDacBiet ? "x" : "";
+                    worksheet.Cells[row, 24].Value = record.TaxiDu3Tang1 ? "x" : "";
 
                     // Định dạng căn giữa cho tất cả các cột dữ liệu trừ cột SĐT (căn trái)
                     for (int col = 1; col <= headers.Length; col++)
