@@ -21,5 +21,10 @@ namespace Mobiphone.Models
         public bool ABABAC { get; set; } = false;
         public bool ABACAC { get; set; } = false;
         public bool XXXYYY { get; set; } = false;
+        public bool XXAYYA { get; set; } = false;
+        public bool XAXBXC { get; set; } = false;
+        public bool AXBXCX { get; set; } = false;
+        public bool DuoiDacBiet { get; set; } = false;
+        public bool TaxiDu3Tang1 { get; set; } = false;
     }
 }

@@ -96,9 +96,15 @@ if errorlevel 1 (
 echo.
 
 echo [7/7] Building MSI installer...
-wix extension add WixToolset.Util.wixext 2>nul
+for /f "usebackq delims=" %%V in (`powershell -NoProfile -Command "[xml]$p = Get-Content 'Mobiphone.csproj'; $p.Project.PropertyGroup.Version"`) do set "APP_VERSION=%%V"
+if not defined APP_VERSION (
+    echo Khong doc duoc phien ban tu Mobiphone.csproj!
+    pause
+    goto end
+)
+echo Installer version: %APP_VERSION%
 cd Installer
-wix build Package.wxs HarvestedFiles.wxs -arch x64 -d PublishDir="..\bin\Release\net8.0-windows\win-x64\publish" -o "..\SC Hoang Quoc.msi"
+wix build Package.wxs HarvestedFiles.wxs -arch x64 -d PublishDir="..\bin\Release\net8.0-windows\win-x64\publish" -d ProductVersion="%APP_VERSION%" -o "..\SC Hoang Quoc.msi"
 set BUILD_RESULT=%errorlevel%
 cd ..
 
@@ -225,6 +231,10 @@ if exist "*.msi" (
 if exist "*.wixpdb" (
     del /f /q "*.wixpdb" 2>nul
     echo   Removed: *.wixpdb
+)
+if exist ".wix" (
+    rmdir /s /q ".wix" 2>nul
+    echo   Removed: .wix
 )
 
 echo.
